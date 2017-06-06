@@ -6,17 +6,19 @@ org=$1
 repo=$2
 branch=${3:-"master"} # default to master when branch isn't specified
 
-mkdir temp && cd temp
+mkdir "temp" && cd "temp"
 # make folder (same as input, no checking!)
 #mkdir $repo
 #git clone git@github.com:$org/$repo.git --single-branch
+
 git clone "https://${GH_TOKEN}@${GH_REF}" --single-branch
+
 # switch to gh-pages branch
 #pushd $repo >/dev/null
 git checkout --orphan gh-pages
 
 # remove all content
-git rm -rf -q .
+#git rm -rf -q .
 
 # use bower to install runtime deployment   
 #bower cache clean $repo # ensure we're getting the latest from the desired branch.
