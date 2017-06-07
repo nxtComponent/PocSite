@@ -25,11 +25,11 @@ branch=${5:-"master"} # default to master when branch isn't specified
 mkdir temp && cd temp
 
 # make folder (same as input, no checking!)
-#mkdir $repo
+mkdir $repo
 git clone "https://${GH_TOKEN}@${GH_REF}" --single-branch
 
 # switch to gh-pages branch
-#pushd $repo >/dev/null
+pushd $repo >/dev/null
 git checkout --orphan gh-pages
 
 # remove all content
@@ -59,4 +59,4 @@ git add -A .
 git commit -am 'Deploy to GitHub Pages'
 git push --force --quiet -u "https://${GH_TOKEN}@${GH_REF}" gh-pages #> /dev/null 2>&1
 
-#popd >/dev/null
+popd >/dev/null
