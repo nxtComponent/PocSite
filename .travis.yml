@@ -21,4 +21,4 @@ after_script:
   - "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
 deploy:
   provider: script
-  script: "bash ./gpages_build.sh nxtComponent PocSite" 
+  script: "bash ./gpages_build.sh nxtComponent pocsite tavisca-gpawade gpawade@tavisca.com" 
