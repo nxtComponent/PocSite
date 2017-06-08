@@ -1,0 +1,1240 @@
+<link rel="import" href="../../../polymer/polymer.html">
+<link rel="import" href="../../../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../../iron-icon/iron-icon.html">
+<link rel="import" href="../../../paper-ripple/paper-ripple.html">
+<link rel="import" href="../../../paper-styles/color.html">
+<link rel="import" href="../../../paper-styles/default-theme.html">
+<link rel="import" href="../../../paper-styles/shadow.html">
+<link rel="import" href="../../../paper-styles/typography.html">
+<link rel="import" href="../../../iron-resizable-behavior/iron-resizable-behavior.html">
+<link rel="import" href="../../../moment-element/moment-import.html">
+<link rel="import" href="t-date-picker-icons.html">
+
+<dom-module id="t-calendar">
+  <template>
+    <style>
+      .selectedRange {
+        border-top: 1px solid var(--color-for-calendar-selected-range, #4CB050);
+        border-bottom: 1px solid var(--color-for-calendar-selected-range, #4CB050);
+      }
+      
+      .selectEndBorder .borderDiv {
+        border-top: 1px solid var(--color-for-calendar-selected-range, #4CB050);
+        border-bottom: 1px solid var(--color-for-calendar-selected-range, #4CB050);
+      }
+      
+      .selectStartBorder .borderDiv {
+        margin-left: 51%;
+        border-top: 1px solid var(--color-for-calendar-selected-range, #4CB050);
+        border-bottom: 1px solid var(--color-for-calendar-selected-range, #4CB050);
+      }
+      
+      .selectedRangeSun {
+        border-left: 1px solid var(--color-for-calendar-selected-range, #4CB050);
+        border-top-left-radius: 100%;
+        border-bottom-left-radius: 100%;
+        border-top: 1px solid var(--color-for-calendar-selected-range, #4CB050);
+        border-bottom: 1px solid var(--color-for-calendar-selected-range, #4CB050);
+      }
+      
+      .selectedRangeSat {
+        border-right: 1px solid var(--color-for-calendar-selected-range, #4CB050);
+        border-top-right-radius: 100%;
+        border-bottom-right-radius: 100%;
+        border-top: 1px solid var(--color-for-calendar-selected-range, #4CB050);
+        border-bottom: 1px solid var(--color-for-calendar-selected-range, #4CB050);
+      }
+      
+      .selectfirst {
+        background-image: var(--background-img-for-selected-date);
+        background-repeat: no-repeat;
+        color: white;
+      }
+      
+      .selectlast {
+        background-image: var(--background-img-for-selected-date);
+        background-repeat: no-repeat;
+        -webkit-text-fill-color: white;
+        color: white;
+      }
+      
+      .selectToday {
+        background-image: var(--background-img-for-today-date);
+        background-repeat: no-repeat;
+        color: var(--color-for-calendar-selected-range, #4CB050);
+        background-position: 50%;
+        border-radius: 100%;
+      }
+      
+       :host {
+        display: inline;
+        box-sizing: border-box;
+        padding: 12px 0;
+        position: relative;
+        width: 100%;
+        height: 100%;
+        min-width: 360px;
+        min-height: 160px;
+        color: var(--primary-text-color);
+        -webkit-font-smoothing: antialiased;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        --ease-in-sine: cubic-bezier(0.47, 0, 0.745, 0.715);
+        --ease-out-sine: cubic-bezier(0.39, 0.575, 0.565, 1);
+        @apply(--paper-font-body1);
+        @apply(--paper-calendar);
+        overflow: hidden;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        @apply(--paper-calendar);
+      }
+      
+      #calendar {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        @apply(--layout-horizontal);
+      }
+      
+      #months {
+        width: 100%;
+        height: 100%;
+        @apply(--layout-horizontal);
+      }
+      
+      #months.animating .month-nav {
+        opacity: 1;
+      }
+      
+      #months.animating {
+        transition-property: transform, opacity;
+        transition-duration: 0.00000000000001s;
+        -moz-transition-property: transform, none;
+        -moz-transition-duration: 0.0000000001s;
+      }
+      
+      #months.animating.swipe {
+        transition-timing-function: var(--ease-in-sine);
+        --webkit-transition-timing-function: var(--ease-in-sine);
+      }
+      
+      #months.animating.reset {
+        transition-timing-function: var(--ease-out-sine);
+        --webkit-transition-timing-function: var(--ease-out-sine);
+      }
+      
+      .month {
+        height: 100%;
+        @apply(--layout-vertical);
+        @apply(--layout-justified);
+        @apply(--layout-flex);
+        border-left: 1px solid lightgray;
+      }
+      
+      .month-row,
+      .month-nav {
+        width: 250px;
+        height: calc(100%/8);
+        box-sizing: border-box;
+        padding: 0 calc(100%/36);
+      }
+      
+      .month-col {
+        position: relative;
+        @apply(--layout-vertical);
+        @apply(--layout-flex);
+      }
+      
+      .month-nav {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 40px;
+        opacity: 1;
+        @apply(--layout-horizontal);
+        @apply(--layout-center);
+      }
+      
+      .month-nav .col {
+        position: relative;
+        @apply(--layout-vertical);
+        @apply(--layout-center-center);
+      }
+      
+      .month-nav .btn .icon {
+        cursor: pointer;
+        color: gray;
+      }
+      
+      .month-nav .btn .ripple {
+        position: absolute;
+        width: 48px;
+        height: 48px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+      
+      .month-nav .btn.right {
+        text-align: right;
+      }
+      
+      .month-name {
+        line-height: 24px;
+        vertical-align: middle;
+        text-align: center;
+        font-weight: bold;
+        color: black;
+        @apply(--paper-font-body2);
+        @apply(--layout-horizontal);
+        @apply(--layout-center);
+        @apply(--layout-center-justified);
+        @apply(--layout-flex);
+      }
+      
+      .month-weekdays {
+        color: gray;
+        @apply(--layout-horizontal);
+        @apply(--layout-justified);
+        @apply(--layout-flex);
+      }
+      
+      .month-days {
+        @apply(--layout-horizontal);
+        @apply(--layout-justified);
+        @apply(--layout-flex);
+      }
+      
+      .month-col .day {
+        cursor: default;
+        pointer-events: none;
+        @apply(--layout-fit);
+        @apply(--layout-vertical);
+        @apply(--layout-center-center);
+      }
+      
+      .month-col {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        @apply(--layout-center-center);
+      }
+      
+      .day-item {
+        width: 100%;
+        height: 100%;
+      }
+      
+      .day-item::selection {
+        background: none;
+      }
+      
+      .day-item.selected .day {
+        color: var(--text-primary-color);
+      }
+      
+      .day-item:not([disabled]) {
+        cursor: pointer;
+      }
+      
+      .day-item[disabled] .day {
+        color: var(--text-disabled-color, lightgray);
+      }
+      
+      .day-item.selected.today .day {
+        color: var(--text-primary-color);
+        background-color: white;
+        border: gray solid 1px;
+        border-radius: 100%;
+      }
+      
+      .flex {
+        @apply(--layout-flex);
+      }
+      
+      .flex-5 {
+        @apply(--layout-flex-5);
+      }
+      
+      @media (min-width: 300px) {
+         :host {
+          display: block;
+          box-sizing: border-box;
+          padding: 12px 0;
+          position: relative;
+          width: 100%;
+          height: 100%;
+          min-width: 100%;
+          min-height: 380px;
+          color: var(--primary-text-color);
+          -webkit-font-smoothing: antialiased;
+          -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+          --ease-in-sine: cubic-bezier(0.47, 0, 0.745, 0.715);
+          --ease-out-sine: cubic-bezier(0.39, 0.575, 0.565, 1);
+          @apply(--paper-font-body1);
+          @apply(--paper-calendar);
+          overflow: hidden;
+          -webkit-touch-callout: none;
+          -webkit-user-select: none;
+          -khtml-user-select: none;
+          -moz-user-select: none;
+          -ms-user-select: none;
+          user-select: none;
+          @apply(--paper-calendar);
+        }
+        .month-nav {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          min-width: 100%;
+          opacity: 1;
+          @apply(--layout-horizontal);
+          @apply(--layout-center);
+        }
+        .month-row,
+        .month-nav {
+          width: 100%;
+          min-width: 100%;
+          height: calc(100%/8);
+          box-sizing: border-box;
+          padding: 0 calc(100%/36);
+        }
+        .month-col {
+          position: relative;
+          @apply(--layout-vertical);
+          @apply(--layout-flex);
+        }
+      }
+      
+      @media (max-width: 767px) {
+        .month {
+          min-width: 100%;
+          height: 100%;
+          overflow: auto;
+          @apply(--layout-vertical);
+          @apply(--layout-justified);
+          @apply(--layout-flex);
+          border-left: 1px solid lightgray;
+        }
+        .month-nav {
+          display: none;
+        }
+        .selectfirst {
+          background-position: 50%;
+        }
+        .selectlast {
+          background-position: 50%;
+        }
+        .month-row,
+        .month-nav {
+          height: calc(100%/9);
+        }
+        #calendar {
+          overflow: auto;
+        }
+        #months {
+          display: block;
+          height: 86%;
+        }
+      }
+      
+      @media (min-width: 768px) and (max-width: 1023px) {
+         :host {
+          display: inline;
+          box-sizing: border-box;
+          padding: 12px 0;
+          position: relative;
+          width: 100%;
+          height: 100%;
+          min-width: 300px;
+          min-height: 160px;
+          color: var(--primary-text-color);
+          -webkit-font-smoothing: antialiased;
+          -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+          --ease-in-sine: cubic-bezier(0.47, 0, 0.745, 0.715);
+          --ease-out-sine: cubic-bezier(0.39, 0.575, 0.565, 1);
+          @apply(--paper-font-body1);
+          @apply(--paper-calendar);
+          overflow: hidden;
+          -webkit-touch-callout: none;
+          -webkit-user-select: none;
+          -khtml-user-select: none;
+          -moz-user-select: none;
+          -ms-user-select: none;
+          user-select: none;
+          @apply(--paper-calendar);
+        }
+        .month-nav {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 350px;
+          opacity: 1;
+          @apply(--layout-horizontal);
+          @apply(--layout-center);
+        }
+        .month-row,
+        .month-nav {
+          width: 250px;
+          height: calc(100%/8);
+          box-sizing: border-box;
+          padding: 0 calc(100%/36);
+        }
+        .month-col {
+          position: relative;
+          @apply(--layout-vertical);
+          @apply(--layout-flex);
+        }
+        #monthNav {
+          width: 114%;
+          margin-left: -46px;
+        }
+        .selectfirst {
+          background-position: 50%;
+        }
+        .selectlast {
+          background-position: 50%;
+        }
+      }
+      
+      @media (min-width: 1024px) and (max-width: 1200px) {
+         :host {
+          display: inline;
+          box-sizing: border-box;
+          padding: 12px 0;
+          position: relative;
+          width: 100%;
+          height: 100%;
+          min-width: 300px;
+          min-height: 160px;
+          color: var(--primary-text-color);
+          -webkit-font-smoothing: antialiased;
+          -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+          --ease-in-sine: cubic-bezier(0.47, 0, 0.745, 0.715);
+          --ease-out-sine: cubic-bezier(0.39, 0.575, 0.565, 1);
+          @apply(--paper-font-body1);
+          @apply(--paper-calendar);
+          overflow: hidden;
+          -webkit-touch-callout: none;
+          -webkit-user-select: none;
+          -khtml-user-select: none;
+          -moz-user-select: none;
+          -ms-user-select: none;
+          user-select: none;
+          @apply(--paper-calendar);
+        }
+        .month-nav {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 350px;
+          opacity: 1;
+          @apply(--layout-horizontal);
+          @apply(--layout-center);
+        }
+        .month-row,
+        .month-nav {
+          width: 250px;
+          height: calc(100%/8);
+          box-sizing: border-box;
+          padding: 0 calc(100%/36);
+        }
+        .month-col {
+          position: relative;
+          @apply(--layout-vertical);
+          @apply(--layout-flex);
+        }
+        #monthNav {
+          width: 112%;
+          margin-left: -37px;
+        }
+        .selectfirst {
+          background-position: 50%;
+        }
+        .selectlast {
+          background-position: 50%;
+        }
+      }
+      
+      @media (min-width: 1200px) {
+         :host {
+          display: inline;
+          box-sizing: border-box;
+          padding: 12px 0;
+          position: relative;
+          width: 100%;
+          height: 100%;
+          min-width: 300px;
+          min-height: 160px;
+          color: var(--primary-text-color);
+          -webkit-font-smoothing: antialiased;
+          -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+          --ease-in-sine: cubic-bezier(0.47, 0, 0.745, 0.715);
+          --ease-out-sine: cubic-bezier(0.39, 0.575, 0.565, 1);
+          @apply(--paper-font-body1);
+          @apply(--paper-calendar);
+          overflow: hidden;
+          -webkit-touch-callout: none;
+          -webkit-user-select: none;
+          -khtml-user-select: none;
+          -moz-user-select: none;
+          -ms-user-select: none;
+          user-select: none;
+          @apply(--paper-calendar);
+        }
+        .month-nav {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 350px;
+          opacity: 1;
+          @apply(--layout-horizontal);
+          @apply(--layout-center);
+        }
+        .month-row,
+        .month-nav {
+          width: 250px;
+          height: calc(100%/8);
+          box-sizing: border-box;
+          padding: 0 calc(100%/36);
+        }
+        .month-col {
+          position: relative;
+          @apply(--layout-vertical);
+          @apply(--layout-flex);
+        }
+        #monthNav {
+          width: 112%;
+          margin-left: -37px;
+        }
+        .selectfirst {
+          background-position: 50%;
+        }
+        .selectlast {
+          background-position: 50%;
+        }
+      }
+    </style>
+    <div id="calendar">
+      <div id="months" class$="{{_contentClass}}" style="width:100%">
+        <template is="dom-repeat" items="{{_months}}" as="month" id="monthType">
+          <div class$="{{_getMonthClass('month', month)}}">
+            <div class="month-row month-name">
+              <span>{{dateFormat(month.date, 'MMMM YYYY', locale)}}</span>
+            </div>
+            <div class="month-row month-weekdays week">
+              <template is="dom-repeat" id="weekDay" items="{{_weekdays}}">
+                <div class="month-col layout vertical flex">
+                  <div class="day" id="weekday">{{item.0}}</div>
+                </div>
+              </template>
+            </div>
+            <template is="dom-repeat" items="{{month.weeks}}" as="row">
+              <div class="month-row month-days">
+                <template is="dom-repeat" items="{{row}}">
+                  <div dialog-confirm class="month-col">
+                    <div class$="{{_getDayClass('day-item selection', item.date, today, date)}}" disabled$="{{_isDisabled(item.day, item.date, minDate, maxDate)}}"
+                      on-tap="_tapDay" date$="{{item.name}}">
+                      <div class="borderDiv" style="width:50%;height:100%;"></div>
+                      <div style="width:50%; margin-left:22%;" class="day">{{item.day}}</div>
+                    </div>
+                  </div>
+                </template>
+              </div>
+            </template>
+          </div>
+        </template>
+      </div>
+      <div id="monthNav" class="month-nav">
+        <div class="flex col self-stretch">
+          <div class="btn" on-tap="_swipePrevMonth">
+            <paper-ripple center class="ripple circle"></paper-ripple>
+            <iron-icon class="icon flex" icon="date-picker:chevron-left"></iron-icon>
+          </div>
+        </div>
+        <div class="flex-5"></div>
+        <div class="flex col self-stretch">
+          <div class="btn" on-tap="_swipeNextMonth">
+            <paper-ripple center class="ripple circle"></paper-ripple>
+            <iron-icon class="icon flex" icon="date-picker:chevron-right"></iron-icon>
+          </div>
+        </div>
+      </div>
+    </div>
+  </template>
+  <script>
+    (function () {
+
+      // Ignore movement within this distance (px)
+      var WIGGLE_THRESHOLD = 4;
+      var WIGGLE_THRESHOLD_SQUARE = WIGGLE_THRESHOLD * WIGGLE_THRESHOLD;
+
+      // what constitues a flick (px/ms)
+      var FLICK_SPEED = 0.5;
+
+      // Factor for "springy" resistence effect when swiping too far.
+      var RESIST_LENGTH = 40;
+      var RESIST_FACTOR = 2;
+
+      // Number of months to preload on both sides of the current month
+      var PRELOAD_MONTHS = 1;
+
+      function dateDiff(a, b) {
+        a = new Date(a.getTime());
+        b = new Date(b.getTime());
+        a.setHours(0, 0, 0, 0);
+        b.setHours(0, 0, 0, 0);
+        return (a.getTime() - b.getTime()) / 86400000;
+      }
+
+      Polymer({
+        is: 't-calendar',
+        properties: {
+          /*
+           * The selected date
+           */
+          date: {
+            type: Date,
+            notify: true,
+            value: function () {
+              return new Date();
+            },
+          },
+          /**
+           * The current locale
+           */
+          locale: {
+            type: String,
+            value: 'en',
+            notify: true,
+            observer: '_localeChanged'
+          },
+          /**
+           * The minimum allowed date
+           */
+          minDate: {
+            type: Date,
+            value: null
+          },
+          /**
+           * The maximum allowed date
+           */
+          maxDate: {
+            type: Date,
+            value: null
+          },
+          /**
+           *currently selected month (1-12)
+           */
+          currentMonth: {
+            type: Number
+          },
+          /**
+           *currently selected year
+           */
+          currentYear: {
+            type: Number
+          },
+          _contentClass: String,
+          _months: Array,
+          _firstDayOfWeek: Number,
+          /**
+           *To check if given date is first day of week.
+          **/
+          isFirstDayofWeek: String,
+        },
+        behaviors: [
+          Polymer.IronResizableBehavior
+        ],
+        observers: [
+          '_populate(currentYear, currentMonth, locale)',
+        ],
+        listeners: {
+          'iron-resize': '_resizeHandler',
+          'swiped': '_onSwipe'
+        },
+        ready: function () {
+          this._updateToday();
+          this.currentMonth = this.date.getMonth() + 1;
+          this.currentYear = this.date.getFullYear();
+          this._transitionEvent = this._whichTransitionEnd();
+        },
+        /**
+        *To set the month name.
+        **/
+        dateFormat: function (date, format, locale) {
+          if (!date) {
+            return '';
+          }
+          var value = moment(date);
+          value.locale(locale || this.locale);
+          return value.format(format);
+        },
+        /**
+         * To set the locale.
+         **/
+        _localeChanged: function (locale) {
+          var localeMoment = moment();
+          localeMoment.locale(locale);
+          var weekdays = [];
+          for (var i = 0; i < 7; i++) {
+            weekdays.push(localeMoment.weekday(i).format('dd'));
+            if (i === 0) {
+              this.isFirstDayOfWeek = localeMoment.weekday(i).format('dddd');
+            }
+          }
+          this._weekdays = weekdays;
+          this._firstDayOfWeek = localeMoment.weekday(0).format('d');
+          var d = localeMoment.weekday(0).format('d');
+          return d;
+        },
+        /**
+        * Number of months to preload on both sides of the current month.
+        **/
+        _changeMinDate: function () {
+          if (this.minDate === null) {
+            this.minDate = new Date();
+          }
+          if (this.maxDate === null) {
+            this.maxDate = new Date(new Date().setFullYear(new Date().getFullYear() + 1));
+          }
+          if (this.minDate.getFullYear() === this.maxDate.getFullYear()) {
+            var setMinDate = this.maxDate.getMonth() - this.minDate.getMonth();
+          } else {
+            var setMinDate = (12 - this.minDate.getMonth()) + this.maxDate.getMonth();
+          }
+          return setMinDate;
+        },
+        /**
+         * To render the calendar according to month display.
+         **/
+        _populate: function (currentYear, currentMonth) {
+
+          var date, month, weeks, day, d, dayInfo, monthData, months = [];
+          var screen = window.matchMedia("(max-width:767px)");
+          if (screen.matches) {
+            PRELOAD_MONTHS = this._changeMinDate();
+          }
+          // Make sure currentYear/currentMonth are in min/max range
+          if (this.minDate && new Date(currentYear, currentMonth, 0) < this.minDate) {
+
+            this.currentYear = this.minDate.getFullYear();
+            this.currentMonth = this.minDate.getMonth() + 1;
+            return;
+          } else if (this.maxDate && new Date(currentYear, currentMonth - 1, 1) > this.maxDate) {
+            this.currentYear = this.maxDate.getFullYear();
+            this.currentMonth = this.maxDate.getMonth() + 1;
+            return;
+          }
+
+          for (var i = 0; i <= PRELOAD_MONTHS; i++) {
+            weeks = [[]];
+            day = 1;
+            date = new Date(currentYear, currentMonth - 1 + i, 1);
+            month = date.getMonth();
+            monthData = {
+              year: date.getFullYear(),
+              month: date.getMonth() + 1,
+              date: new Date(date)
+            };
+            var firstDay = date.getDay() - this._firstDayOfWeek;
+            if (firstDay < 0) {
+              firstDay = 7 + firstDay;
+            }
+            for (d = 0; d < firstDay; d++) {
+              weeks[0].push({ day: null, date: null });
+            }
+
+            // add actual days
+            while (date.getMonth() === month) {
+              if (weeks[0].length && d % 7 === 0) {
+                // start new week
+                weeks.push([]);
+              }
+              dayInfo = {
+                date: new Date(date.getFullYear(), month, day),
+                name: this.dateFormat(date, 'YYYY-MM-DD'),
+                year: currentYear,
+                month: month,
+                day: day,
+              };
+              weeks[weeks.length - 1].push(dayInfo);
+              date.setDate(++day);
+              d++;
+            }
+
+            // add remaining "padding" days
+            while (d < 42) {
+              if (d % 7 === 0) {
+                weeks.push([]);
+              }
+              weeks[weeks.length - 1].push({ day: null, date: null });
+              d += 1;
+            }
+
+            monthData.weeks = weeks;
+            months.push(monthData);
+
+          }
+          if (!months.length) {
+            return;
+          }
+          this.set('_months', months);
+          this.async(function () {
+            this._updateSelection();
+            this._positionSlider();
+          });
+        },
+
+        /**
+         * To set CSS for selected dates and selected range.
+         **/
+        _getDayClass: function (cssClass, date) {
+          var startDateDefined = true;
+          if (date) {
+            if (date < this.today) {
+              return cssClass;
+            }
+            if (date > this.maxDate) {
+              return cssClass;
+            }
+            var startdate = this.domHost.domHost.domHost.querySelector("#start").value;
+            var endDate = this.domHost.domHost.domHost.querySelector("#end").value;
+            if (startdate === undefined) {
+              startDateDefined = false;
+            }
+            if (dateDiff(date, this.today) === 0 && startdate === undefined) {
+              cssClass += ' selectToday';
+              this.async(function () {
+                this._updateSelection();
+              });
+            }
+            else if (dateDiff(date, this.today) === 0 && dateDiff(startdate, this.today) != 0) {
+              cssClass += ' selectToday';
+              this.async(function () {
+                this._updateSelection();
+              });
+            }
+
+            var enddate;
+            var startNotSelected = false;
+
+            if (startdate === undefined) {
+              startNotSelected = true;
+              startdate = this.today;
+            }
+            startdate.setHours(0, 0, 0, 0);
+
+            if (endDate === undefined) {
+              enddate = startdate;
+            }
+            else {
+              enddate = endDate;
+              enddate.setHours(0, 0, 0, 0);
+            }
+            date.setHours(0, 0, 0, 0);
+            if (date.getTime() === startdate.getTime() && this.today.getTime() != startdate.getTime()) {
+              cssClass += ' selected';
+              this.async(function () {
+                this._updateSelection();
+              });
+            }
+            if (date > startdate && date > enddate && this.domHost.domHost.LastStartDate === startdate) {
+              return cssClass;
+            }
+            var checkDayName = this._checkDayName(date);
+            var checkFirstDayWeek = this._checkFirstDayofWeek(date);
+            var checkFirstDayOfMonth = this._checkFirstDayofMonth(date);
+            var checkLastDayOfMonth = this._checkLastDayofMonth(date);
+            var checkLastDayOfWeek = this._checkLastDayofWeek(date);
+
+            if (date > startdate && date < enddate) {
+              if (checkDayName != checkFirstDayWeek && date.getTime() != checkFirstDayOfMonth.getTime()) {
+                cssClass += ' selectedRange';
+                this.async(function () {
+                  this._updateSelection();
+                });
+              }
+            }
+            if (date.getTime() === startdate.getTime() && startNotSelected == false) {
+              cssClass += ' selectfirst';
+              if (checkDayName != checkLastDayOfWeek && date.getTime() != checkLastDayOfMonth.getTime()) {
+                cssClass += ' selectStartBorder';
+              }
+              this.async(function () {
+                this._updateSelection();
+              });
+            }
+            if (enddate != startdate) {
+              if (date.getTime() === enddate.getTime()) {
+                cssClass += ' selectlast';
+                if (date.getTime() != checkFirstDayOfMonth.getTime() && checkDayName != checkFirstDayWeek) {
+                  cssClass += ' selectEndBorder';
+                }
+                this.async(function () {
+                  this._updateSelection();
+                });
+              }
+            }
+
+            if (date >= startdate && date < enddate) {
+
+              if ((checkDayName === checkFirstDayWeek || date.getTime() === checkFirstDayOfMonth.getTime())) {
+                cssClass += ' selectedRangeSun';
+              }
+              else if ((checkDayName === checkLastDayOfWeek || date.getTime() === checkLastDayOfMonth.getTime())) {
+                cssClass += ' selectedRangeSat';
+              }
+              if ((checkDayName === checkLastDayOfWeek && date.getTime() === checkFirstDayOfMonth.getTime())) {
+                cssClass += ' selectedRangeSat';
+              }
+              if ((checkDayName === checkFirstDayWeek && date.getTime() === checkLastDayOfMonth.getTime())) {
+                cssClass += ' selectedRangeSat';
+              }
+            }
+
+            var maxDt = this.maxDate;
+            maxDt.setHours(0, 0, 0, 0);
+            cssClass = this._removeDuplicateWord(cssClass);
+            if (date.getTime() === startdate.getTime()) {
+              if (checkDayName === checkLastDayOfWeek) {
+                cssClass = cssClass.replace("selectedRange", "");
+                cssClass = cssClass.replace("selectedRangeSat", "");
+              }
+              else if (date.getTime() === checkLastDayOfMonth.getTime()) {
+                cssClass = cssClass.replace("selectedRange", "");
+                cssClass = cssClass.replace("selectedRangeSat", "");
+              }
+            }
+            if (date.getTime() === startdate.getTime() && date.getTime() === maxDt.getTime()) {
+              cssClass = cssClass.replace("selectlast", "");
+              cssClass = cssClass.replace("selectedRange", "");
+            }
+            if (date.getTime() === this.today.getTime() && !startDateDefined) {
+              cssClass = cssClass.replace("selectedRange", "");
+            }
+            if (date.getTime() === startdate.getTime() && checkDayName === checkFirstDayWeek) {
+              cssClass = cssClass.replace("selectedRangeSun", "");
+            }
+            if (date.getTime() === startdate.getTime() && date.getTime() === checkFirstDayOfMonth.getTime()) {
+              cssClass = cssClass.replace("selectedRangeSun", "");
+            }
+            if (date.getTime() === startdate.getTime() && date.getTime() === enddate.getTime()) {
+              cssClass = cssClass.replace("selectStartBorder", "");
+              cssClass = cssClass.replace("selectEndBorder", "");
+            }
+          }
+          return cssClass;
+        },
+        /**
+         * To remove duplicate css class from element.
+         **/
+        _removeDuplicateWord: function (string) {
+          var uniqueList = string.split(' ').filter(function (item, i, allItems) {
+            return i == allItems.indexOf(item);
+          }).join(' ');
+
+
+          return uniqueList;
+        },
+        /**
+         * To check day name.
+         **/
+        _checkDayName: function (date) {
+          var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+          var d = new Date(date);
+          var dayName = days[d.getDay()];
+          return dayName;
+        },
+        /**
+         * To check last day of month.
+         **/
+        _checkLastDayofMonth: function (date) {
+          var d = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+          return d;
+        },
+        /**
+         * To check first day of month.
+         **/
+        _checkFirstDayofMonth: function (date) {
+          var d = new Date(date);
+          d.setMonth(d.getMonth(), 1);
+          d.setHours(0, 0, 0, 0);
+          return d;
+        },
+        /**
+         * To check first day of week.
+         **/
+        _checkFirstDayofWeek: function (date) {
+          var dayName = this.querySelector("#weekday").textContent;
+          if (dayName === "M") {
+            return "Monday";
+          }
+          else {
+            return "Sunday";
+          }
+        },
+        /**
+         * To check last day of week.
+         **/
+        _checkLastDayofWeek: function (date) {
+          var dayName = this.querySelector("#weekday").textContent;
+          if (dayName === "M") {
+            return "Sunday";
+          }
+          else {
+            return "Saturday";
+          }
+        },
+        /**
+         * To check disabled dates.
+         **/
+        _isDisabled: function (day, date) {
+          return !day || !this._withinValidRange(date);
+        },
+        
+        _getMonthClass: function (name, month) {
+          return name + ' month-' + month.year + '-' + month.month;
+        },
+        /**
+         * To swipe on previous month after clicking on back arrow.
+         **/
+        _swipePrevMonth: function () {
+          var startDate = this.domHost.domHost.domHost.querySelector("#start");
+          var endDate = this.domHost.domHost.domHost.querySelector("#end");
+          var scrollPrevMonth = this.domHost.domHost.id;
+          if (scrollPrevMonth === "start" && this.today.getMonth() + 1 === this.currentMonth && this.today.getFullYear() === this.currentYear) {
+            this._populate(this.today.getFullYear(), this.today.getMonth() + 1);
+          }
+          else if (scrollPrevMonth === "end" && startDate.value.getMonth() + 1 === this.currentMonth && startDate.value.getFullYear() === this.currentYear) {
+            this._populate(startDate.value.getFullYear(), startDate.value.getMonth() + 1);
+          }
+          else {
+            this.fire('swiped', { direction: 'right' });
+          }
+        },
+        /**
+         * To swipe on next month after clicking on next arrow.
+         **/
+        _swipeNextMonth: function () {
+          if (!this.maxDate || this.currentYear < this.maxDate.getFullYear() || this.currentMonth < this.maxDate.getMonth() + 1) {
+            this.fire('swiped', { direction: 'left' });
+          }
+          else{
+            return;
+          }
+        },
+        /**
+         * This function works as listener swipe.
+         **/
+        _onSwipe: function (event) {
+          if (event.detail.direction === 'right') {
+            this._prevMonth();
+            return true;
+          }
+          else {
+            this._nextMonth();
+            return true;
+          }
+        },
+        /**
+         * To increase or decrease next month and previous month.
+         **/
+        _incrMonth: function (i) {
+          var date = new Date(this.currentYear, this.currentMonth - 1 + i);
+          var year = date.getFullYear();
+          var month = date.getMonth() + 1;
+          if (this._monthWithinValidRange(year, month)) {
+            this.currentYear = year;
+            this.currentMonth = month;
+          }
+        },
+         /**
+         * To decrease previous month.
+         **/
+        _prevMonth: function () {
+          this._incrMonth(-1);
+        },
+         /**
+         * To increase next month.
+         **/
+        _nextMonth: function () {
+          this._incrMonth(1);
+        },
+         /**
+         * To select dates after clicking or tapping on date.
+         **/
+        _tapDay: function (event) {
+          var startDate = this.domHost.domHost.domHost.querySelector("#start");
+          var endDate = this.domHost.domHost.domHost.querySelector("#end");
+          var modelItemDate = event.model.item.date;
+          var newDate;
+          if (!this._withinValidRange(modelItemDate)) {
+            event.preventDefault();
+            event.stopPropagation();
+            return;
+          }
+          var item = event.model.item;
+          item.year = modelItemDate.getFullYear();
+          if (item.date.getTime() == this._checkLastDayofMonth(item.date).getTime()) {
+            newDate = new Date(item.date.getTime());
+          }
+          else {
+            newDate = new Date(this.date.getTime());
+          }
+          newDate.setDate(item.day);
+          newDate.setYear(item.year);
+          newDate.setMonth(item.month);
+          this.date = newDate;
+          if (this.domHost.domHost.id === "start") {
+            startDate.value = newDate;
+            if(endDate.value === undefined || startDate.value > endDate.value){
+              var startDateValue = new Date(startDate.value);
+              startDateValue.setDate(startDateValue.getDate() + this.domHost.domHost.domHost.defaultStayDuration);
+              var maxDt = this.maxDate;
+                maxDt.setHours(0, 0, 0, 0);
+                if (startDateValue > maxDt) {
+                  endDate.value = maxDt;
+                }
+                else{
+              endDate.value = startDateValue;
+                }
+            }
+                endDate.minDate = startDate.value;
+                var setCheckOutMin = startDate.value;
+                var setMax = new Date(setCheckOutMin);
+                setMax.setDate(setCheckOutMin.getDate() + this.domHost.domHost.domHost.maxStayDuration);
+                 if(setMax < this.maxDate){
+                endDate.maxDate = setMax;
+                }
+                else{
+                  endDate.maxDate = this.maxDate;
+                }
+                endDate._showDialog();
+               
+                    if( endDate.value > setMax){
+                  endDate.value = setMax;
+                }
+            if (startDate.value > endDate.value) {
+              endDate.value = newDate;
+            }
+          }
+          else if (this.domHost.domHost.id === "end") {
+            if (item.date.getTime() === startDate.value.getTime()) {
+              event.preventDefault();
+              event.stopPropagation();
+              return;
+            }
+            endDate.value = newDate;
+            if (mq) {
+              event.stopPropagation();
+            }
+            if (startDate.value.getMonth() === endDate.value.getMonth()) {
+              this._populate(endDate.value.getFullYear(), endDate.value.getMonth() + 1);
+            }
+            else {
+              this._populate(endDate.value.getFullYear(), endDate.value.getMonth());
+            }
+          }
+
+          var isIE = /*@cc_on!@*/false || !!document.documentMode;
+          if (isIE) {
+            this.domHost.domHost.querySelector("#input").querySelector("#input").focus();
+            this.domHost.domHost.querySelector("#input").querySelector("#input").blur();
+          }
+        },
+
+         /**
+         * To check date is valid or not.
+         **/
+        _isValidDate: function (date) {
+          return date && date.getTime && !isNaN(date.getTime());
+        },
+         /**
+         *To check date is within valid range or not. 
+         **/
+        _withinValidRange: function (date) {
+          if (this._isValidDate(date)) {
+            return (!this.minDate || date >= this.minDate) && (!this.maxDate || date <= this.maxDate);
+          }
+          return false;
+        },
+        /**
+         * To check month is within valid range or not.
+         **/
+        _monthWithinValidRange: function (year, month) {
+          var monthStart = new Date(year, month - 1, 1);
+          var monthEnd = new Date(year, month, 0);
+          return this._withinValidRange(monthStart) || this._withinValidRange(monthEnd);
+        },
+        
+        _positionSlider: function () {
+          if (!this._months || !this._containerWidth) {
+            return;
+          }
+        },
+        /**
+         * To update the selected dates and css class.
+         **/
+        
+        _updateSelection: function () {
+          // Force the day selection circle to maintain a 1:1 ratio
+          this.async(function () {
+            var selected = this.$$('.selected');
+            if (!selected) {
+              return;
+            }
+            selected.style.height = '';
+            selected.style.width = '';
+            var w = selected.parentElement.offsetWidth;
+            var h = selected.parentElement.offsetHeight;
+            selected.style.flex = '';
+            window.requestAnimationFrame(function () {
+              if (w > 0 && w < h) {
+                selected.style.height = h + 'px';
+              }
+              else if (h > 0) {
+                selected.style.width = w + 'px';
+              }
+            });
+          });
+        },
+        
+        _resizeHandler: function () {
+          this.async(function () {
+            this._containerWidth = this.$.calendar.offsetWidth;
+            this._updateSelection();
+          });
+        },
+        /**
+         * To get the name of name.
+         **/
+        _getDayName: function (date) {
+          return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+        },
+        _updateToday: function () {
+          this.today = new Date();
+          this.today.setHours(0, 0, 0, 0);
+        },
+        _whichTransitionEnd: function () {
+          var transitions = {
+            'WebkitTransition': 'webkitTransitionEnd',
+            'MozTransition': 'transitionend',
+            'OTransition': 'oTransitionEnd otransitionend',
+            'transition': 'transitionend'
+          };
+
+          for (var t in transitions) {
+            if (this.style[t] !== undefined) {
+              return transitions[t];
+            }
+          }
+        }
+      });
+    })();
+  </script>
+</dom-module>

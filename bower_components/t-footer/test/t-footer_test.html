@@ -1,0 +1,1574 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+  <title>t-footer test</title>
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+
+  <link rel="import" href="../t-footer.html">
+</head>
+<body>
+
+  <test-fixture id="basic">
+    <template>
+      <t-footer sections="[[sections]]" links="[[links]]"></t-footer>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="footerWithoutPrimaryAndSecondaryLinks">
+    <template>
+      <t-footer sections="[[sections]]" links="[[links]]"></t-footer>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="footerWithoutPrimaryLinks">
+    <template>
+      <t-footer sections="[[sections]]" links="[[links]]"></t-footer>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="footerWithSecondaryLinks">
+    <template>
+      <t-footer sections="[[sections]]" links="[[links]]"></t-footer>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="footerWithoutBottomStartLinks">
+    <template>
+      <t-footer sections="[[sections]]" links="[[links]]"></t-footer>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="footerWithoutSections">
+    <template>
+      <t-footer sections="[[sections]]" links="[[links]]"></t-footer>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="footerWithoutBottomEndLinks">
+    <template>
+      <t-footer sections="[[sections]]" links="[[links]]"></t-footer>
+    </template>
+  </test-fixture>
+
+  <script>
+
+  suite('t-footer', function() {
+    var footer;
+    var footerWithoutPrimaryAndSecondaryLinks;
+    var footerWithoutPrimaryLinks;
+    var footerWithSecondaryLinks;
+    var footerWithoutBottomStartLinks;
+    var footerWithoutBottomEndLinks;
+    var footerWithoutSections;
+
+    function setupFooterWithoutPrimaryLinks(){
+
+      var sections = {
+        openInNewTab: true,
+        selectedIndex:0,
+        options:[{
+          title:"International Destinations",
+          options:[
+            {title:"Abu Dhabi Hotels",url:"https://google.com" },
+            {title:"AC Hotels",url:"https://google.com" },
+            {title:"AccorHotels",url:"https://google.com" },
+            {title:"Ace Hotel",url:"https://google.com" },
+            {title:"Adagio (hotel)",url:"https://google.com" },
+            {title:"Aerowisata",url:"https://google.com" },
+            {title:"Affinia Hotel",url:"https://google.com" },
+            {title:"Aitken Spence",url:"https://google.com" },
+            {title:"AJ Capital",url:"https://google.com" },
+            {title:"Allegro Resorts",url:"https://google.com" },
+            {title:"Aloft Hotels",url:"https://google.com" },
+            {title:"Aman Resorts",url:"https://google.com" },
+            {title:"Amari Hotels ",url:"https://google.com" },
+            {title:"America's Best ",url:"https://google.com" },
+            {title:"AmericInn",url:"https://google.com" },
+            {title:"AMResorts",url:"https://google.com" },
+            {title:"APA Group",url:"https://google.com" },
+            {title:"Aqua Hotels ",url:"https://google.com" },
+            {title:"Aqueen Hotels",url:"https://google.com" },
+            {title:"Archipelago International",url:"https://google.com" },
+            {title:"Arp-Hansen Hotel ",url:"https://google.com" },
+            {title:"Autograph Hotels",url:"https://google.com" },
+            {title:"Azimut Hotels",url:"https://google.com" }
+          ]
+        },
+        {
+          title:"Domestic Flights",
+          options:[
+            {title:"Abu Dhabi Hotels",url:"https://google.com" },
+            {title:"AC Hotels",url:"https://google.com" },
+            {title:"AccorHotels",url:"https://google.com" },
+            {title:"Ace Hotel",url:"https://google.com" },
+            {title:"Adagio (hotel)",url:"https://google.com" },
+            {title:"Aerowisata",url:"https://google.com" },
+            {title:"Affinia Hotel",url:"https://google.com" },
+            {title:"Aitken Spence",url:"https://google.com" },
+            {title:"AJ Capital",url:"https://google.com" },
+            {title:"Allegro Resorts",url:"https://google.com" },
+            {title:"Aloft Hotels",url:"https://google.com" },
+            {title:"Aman Resorts",url:"https://google.com" },
+            {title:"Amari Hotels ",url:"https://google.com" },
+            {title:"America's Best ",url:"https://google.com" },
+            {title:"AmericInn",url:"https://google.com" },
+            {title:"AMResorts",url:"https://google.com" },
+            {title:"APA Group",url:"https://google.com" },
+            {title:"Aqua Hotels ",url:"https://google.com" },
+            {title:"Aqueen Hotels",url:"https://google.com" },
+            {title:"Archipelago International",url:"https://google.com" },
+            {title:"Arp-Hansen Hotel ",url:"https://google.com" },
+            {title:"Autograph Hotels",url:"https://google.com" },
+            {title:"Azimut Hotels",url:"https://google.com" }
+          ]
+        },
+        {
+          title:"International Flights",
+          options:[
+            {title:"Abu Dhabi Hotels",url:"https://google.com" },
+            {title:"AC Hotels",url:"https://google.com" },
+            {title:"AccorHotels",url:"https://google.com" },
+            {title:"Ace Hotel",url:"https://google.com" },
+            {title:"Adagio (hotel)",url:"https://google.com" },
+            {title:"Aerowisata",url:"https://google.com" },
+            {title:"Affinia Hotel",url:"https://google.com" },
+            {title:"Aitken Spence",url:"https://google.com" },
+            {title:"AJ Capital",url:"https://google.com" },
+            {title:"Allegro Resorts",url:"https://google.com" },
+            {title:"Aloft Hotels",url:"https://google.com" },
+            {title:"Aman Resorts",url:"https://google.com" },
+            {title:"Amari Hotels ",url:"https://google.com" },
+            {title:"America's Best ",url:"https://google.com" },
+            {title:"AmericInn",url:"https://google.com" },
+            {title:"AMResorts",url:"https://google.com" },
+            {title:"APA Group",url:"https://google.com" },
+            {title:"Aqua Hotels ",url:"https://google.com" },
+            {title:"Aqueen Hotels",url:"https://google.com" },
+            {title:"Archipelago International",url:"https://google.com" },
+            {title:"Arp-Hansen Hotel ",url:"https://google.com" },
+            {title:"Autograph Hotels",url:"https://google.com" },
+            {title:"Azimut Hotels",url:"https://google.com" }
+          ]
+        },
+        {
+          title: "Domestic Destinations",
+          options:[
+            {title:"Abu Dhabi Hotels",url:"https://google.com" },
+            {title:"AC Hotels",url:"https://google.com" },
+            {title:"AccorHotels",url:"https://google.com" },
+            {title:"Ace Hotel",url:"https://google.com" },
+            {title:"Adagio (hotel)",url:"https://google.com" },
+            {title:"Aerowisata",url:"https://google.com" },
+            {title:"Affinia Hotel",url:"https://google.com" },
+            {title:"Aitken Spence",url:"https://google.com" },
+            {title:"AJ Capital",url:"https://google.com" },
+            {title:"Allegro Resorts",url:"https://google.com" },
+            {title:"Aloft Hotels",url:"https://google.com" },
+            {title:"Aman Resorts",url:"https://google.com" },
+            {title:"Amari Hotels ",url:"https://google.com" },
+            {title:"America's Best ",url:"https://google.com" },
+            {title:"AmericInn",url:"https://google.com" },
+            {title:"AMResorts",url:"https://google.com" },
+            {title:"APA Group",url:"https://google.com" },
+            {title:"Aqua Hotels ",url:"https://google.com" },
+            {title:"Aqueen Hotels",url:"https://google.com" },
+            {title:"Archipelago International",url:"https://google.com" },
+            {title:"Arp-Hansen Hotel ",url:"https://google.com" },
+            {title:"Autograph Hotels",url:"https://google.com" },
+            {title:"Azimut Hotels",url:"https://google.com" }
+          ]
+        },
+        {
+          title:"Popular Activities",
+          options:[
+            {title:"Abu Dhabi Hotels",url:"https://google.com" },
+            {title:"AC Hotels",url:"https://google.com" },
+            {title:"AccorHotels",url:"https://google.com" },
+            {title:"Ace Hotel",url:"https://google.com" },
+            {title:"Adagio (hotel)",url:"https://google.com" },
+            {title:"Aerowisata",url:"https://google.com" },
+            {title:"Affinia Hotel",url:"https://google.com" },
+            {title:"Aitken Spence",url:"https://google.com" },
+            {title:"AJ Capital",url:"https://google.com" },
+            {title:"Allegro Resorts",url:"https://google.com" },
+            {title:"Aloft Hotels",url:"https://google.com" },
+            {title:"Aman Resorts",url:"https://google.com" },
+            {title:"Amari Hotels ",url:"https://google.com" },
+            {title:"America's Best ",url:"https://google.com" },
+            {title:"AmericInn",url:"https://google.com" },
+            {title:"AMResorts",url:"https://google.com" },
+            {title:"APA Group",url:"https://google.com" },
+            {title:"Aqua Hotels ",url:"https://google.com" },
+            {title:"Aqueen Hotels",url:"https://google.com" },
+            {title:"Archipelago International",url:"https://google.com" },
+            {title:"Arp-Hansen Hotel ",url:"https://google.com" },
+            {title:"Autograph Hotels",url:"https://google.com" },
+            {title:"Azimut Hotels",url:"https://google.com" }
+          ]
+        }
+      ]};
+
+      var links={
+        "secondaryLinks": {
+          "title": "Follow Us",
+          "options": [
+            {
+              "icon":  'https://image.flaticon.com/icons/svg/174/174855.svg',
+              "url": "http://fb.com/abcd"
+            },
+            {
+              "icon":  'https://image.flaticon.com/icons/svg/174/174848.svg',
+              "url": "http://twitter.com/abcd"
+            }
+          ]
+        },
+        "bottomStartLinks": [
+          {
+            title: 'Developer API',
+            url:''
+          },
+          {
+            title:'About Us',
+            url:''
+          },
+          {
+            title:'Privacy Policy',
+            url:''
+          },
+          {
+            title:'Terms Of Use',
+            url:''
+          },
+          {
+            title:'Legal Disclamer',
+            url:''
+          },
+          {
+            title:'Contact Us',
+            url:'',
+            openInNewTab: false
+          }
+        ],
+        bottomEndLinks: [
+          {
+            //since no url is gives so it should show up as title not an anchor
+            "title": "@ 2017 Mystique All rights reserved"
+          }
+        ]
+      };
+
+      footerWithoutPrimaryLinks = fixture('footerWithoutPrimaryLinks');
+      footerWithoutPrimaryLinks.sections = sections;
+      footerWithoutPrimaryLinks.links = links;
+    }
+
+    function setupFooterWithoutSecondaryLinks(){
+
+      var sections = {
+        openInNewTab: true,
+        selectedIndex:0,
+        options:[{
+          title:"International Destinations",
+          options:[
+            {title:"Abu Dhabi Hotels",url:"https://google.com" },
+            {title:"AC Hotels",url:"https://google.com" },
+            {title:"AccorHotels",url:"https://google.com" },
+            {title:"Ace Hotel",url:"https://google.com" },
+            {title:"Adagio (hotel)",url:"https://google.com" },
+            {title:"Aerowisata",url:"https://google.com" },
+            {title:"Affinia Hotel",url:"https://google.com" },
+            {title:"Aitken Spence",url:"https://google.com" },
+            {title:"AJ Capital",url:"https://google.com" },
+            {title:"Allegro Resorts",url:"https://google.com" },
+            {title:"Aloft Hotels",url:"https://google.com" },
+            {title:"Aman Resorts",url:"https://google.com" },
+            {title:"Amari Hotels ",url:"https://google.com" },
+            {title:"America's Best ",url:"https://google.com" },
+            {title:"AmericInn",url:"https://google.com" },
+            {title:"AMResorts",url:"https://google.com" },
+            {title:"APA Group",url:"https://google.com" },
+            {title:"Aqua Hotels ",url:"https://google.com" },
+            {title:"Aqueen Hotels",url:"https://google.com" },
+            {title:"Archipelago International",url:"https://google.com" },
+            {title:"Arp-Hansen Hotel ",url:"https://google.com" },
+            {title:"Autograph Hotels",url:"https://google.com" },
+            {title:"Azimut Hotels",url:"https://google.com" }
+          ]
+        },
+        {
+          title:"Domestic Flights",
+          options:[
+            {title:"Abu Dhabi Hotels",url:"https://google.com" },
+            {title:"AC Hotels",url:"https://google.com" },
+            {title:"AccorHotels",url:"https://google.com" },
+            {title:"Ace Hotel",url:"https://google.com" },
+            {title:"Adagio (hotel)",url:"https://google.com" },
+            {title:"Aerowisata",url:"https://google.com" },
+            {title:"Affinia Hotel",url:"https://google.com" },
+            {title:"Aitken Spence",url:"https://google.com" },
+            {title:"AJ Capital",url:"https://google.com" },
+            {title:"Allegro Resorts",url:"https://google.com" },
+            {title:"Aloft Hotels",url:"https://google.com" },
+            {title:"Aman Resorts",url:"https://google.com" },
+            {title:"Amari Hotels ",url:"https://google.com" },
+            {title:"America's Best ",url:"https://google.com" },
+            {title:"AmericInn",url:"https://google.com" },
+            {title:"AMResorts",url:"https://google.com" },
+            {title:"APA Group",url:"https://google.com" },
+            {title:"Aqua Hotels ",url:"https://google.com" },
+            {title:"Aqueen Hotels",url:"https://google.com" },
+            {title:"Archipelago International",url:"https://google.com" },
+            {title:"Arp-Hansen Hotel ",url:"https://google.com" },
+            {title:"Autograph Hotels",url:"https://google.com" },
+            {title:"Azimut Hotels",url:"https://google.com" }
+          ]
+        },
+        {
+          title:"International Flights",
+          options:[
+            {title:"Abu Dhabi Hotels",url:"https://google.com" },
+            {title:"AC Hotels",url:"https://google.com" },
+            {title:"AccorHotels",url:"https://google.com" },
+            {title:"Ace Hotel",url:"https://google.com" },
+            {title:"Adagio (hotel)",url:"https://google.com" },
+            {title:"Aerowisata",url:"https://google.com" },
+            {title:"Affinia Hotel",url:"https://google.com" },
+            {title:"Aitken Spence",url:"https://google.com" },
+            {title:"AJ Capital",url:"https://google.com" },
+            {title:"Allegro Resorts",url:"https://google.com" },
+            {title:"Aloft Hotels",url:"https://google.com" },
+            {title:"Aman Resorts",url:"https://google.com" },
+            {title:"Amari Hotels ",url:"https://google.com" },
+            {title:"America's Best ",url:"https://google.com" },
+            {title:"AmericInn",url:"https://google.com" },
+            {title:"AMResorts",url:"https://google.com" },
+            {title:"APA Group",url:"https://google.com" },
+            {title:"Aqua Hotels ",url:"https://google.com" },
+            {title:"Aqueen Hotels",url:"https://google.com" },
+            {title:"Archipelago International",url:"https://google.com" },
+            {title:"Arp-Hansen Hotel ",url:"https://google.com" },
+            {title:"Autograph Hotels",url:"https://google.com" },
+            {title:"Azimut Hotels",url:"https://google.com" }
+          ]
+        },
+        {
+          title: "Domestic Destinations",
+          options:[
+            {title:"Abu Dhabi Hotels",url:"https://google.com" },
+            {title:"AC Hotels",url:"https://google.com" },
+            {title:"AccorHotels",url:"https://google.com" },
+            {title:"Ace Hotel",url:"https://google.com" },
+            {title:"Adagio (hotel)",url:"https://google.com" },
+            {title:"Aerowisata",url:"https://google.com" },
+            {title:"Affinia Hotel",url:"https://google.com" },
+            {title:"Aitken Spence",url:"https://google.com" },
+            {title:"AJ Capital",url:"https://google.com" },
+            {title:"Allegro Resorts",url:"https://google.com" },
+            {title:"Aloft Hotels",url:"https://google.com" },
+            {title:"Aman Resorts",url:"https://google.com" },
+            {title:"Amari Hotels ",url:"https://google.com" },
+            {title:"America's Best ",url:"https://google.com" },
+            {title:"AmericInn",url:"https://google.com" },
+            {title:"AMResorts",url:"https://google.com" },
+            {title:"APA Group",url:"https://google.com" },
+            {title:"Aqua Hotels ",url:"https://google.com" },
+            {title:"Aqueen Hotels",url:"https://google.com" },
+            {title:"Archipelago International",url:"https://google.com" },
+            {title:"Arp-Hansen Hotel ",url:"https://google.com" },
+            {title:"Autograph Hotels",url:"https://google.com" },
+            {title:"Azimut Hotels",url:"https://google.com" }
+          ]
+        },
+        {
+          title:"Popular Activities",
+          options:[
+            {title:"Abu Dhabi Hotels",url:"https://google.com" },
+            {title:"AC Hotels",url:"https://google.com" },
+            {title:"AccorHotels",url:"https://google.com" },
+            {title:"Ace Hotel",url:"https://google.com" },
+            {title:"Adagio (hotel)",url:"https://google.com" },
+            {title:"Aerowisata",url:"https://google.com" },
+            {title:"Affinia Hotel",url:"https://google.com" },
+            {title:"Aitken Spence",url:"https://google.com" },
+            {title:"AJ Capital",url:"https://google.com" },
+            {title:"Allegro Resorts",url:"https://google.com" },
+            {title:"Aloft Hotels",url:"https://google.com" },
+            {title:"Aman Resorts",url:"https://google.com" },
+            {title:"Amari Hotels ",url:"https://google.com" },
+            {title:"America's Best ",url:"https://google.com" },
+            {title:"AmericInn",url:"https://google.com" },
+            {title:"AMResorts",url:"https://google.com" },
+            {title:"APA Group",url:"https://google.com" },
+            {title:"Aqua Hotels ",url:"https://google.com" },
+            {title:"Aqueen Hotels",url:"https://google.com" },
+            {title:"Archipelago International",url:"https://google.com" },
+            {title:"Arp-Hansen Hotel ",url:"https://google.com" },
+            {title:"Autograph Hotels",url:"https://google.com" },
+            {title:"Azimut Hotels",url:"https://google.com" }
+          ]
+        }
+      ]};
+
+      var links={
+        "primaryLinks": {
+          "title": "Contact Us",
+          "options": [
+            {
+              "title": "Ph.:",
+              "options": [
+                {
+                  "title": "+215 (801) 4567",
+                  "url": "tel:+2158014567"
+                },
+                {
+                  "title": "+215 (802) 6789",
+                  "url": "tel:+2158026789"
+                }
+              ]
+            },
+            {
+              "title": "Fax:",
+              "options": [
+                {
+                  "title": "215-123-7890",
+                  "url": "tel:+2151237890"
+                }
+              ]
+            },
+            {
+              "title": "Email:",
+              "options": [
+                {
+                  "title": "enquiry@travelnxt.com",
+                  "url": "mailto:enquiry@travelnxt.com"
+                }
+              ]
+            }
+          ]
+        },
+        "bottomStartLinks": [
+          {
+            title: 'Developer API',
+            url:''
+          },
+          {
+            title:'About Us',
+            url:''
+          },
+          {
+            title:'Privacy Policy',
+            url:''
+          },
+          {
+            title:'Terms Of Use',
+            url:''
+          },
+          {
+            title:'Legal Disclamer',
+            url:''
+          },
+          {
+            title:'Contact Us',
+            url:'',
+            openInNewTab: false
+          }
+        ],
+        bottomEndLinks: [
+          {
+            //since no url is gives so it should show up as title not an anchor
+            "title": "@ 2017 Mystique All rights reserved"
+          }
+        ]
+      };
+
+      footerWithSecondaryLinks = fixture('footerWithSecondaryLinks');
+      footerWithSecondaryLinks.sections = sections;
+      footerWithSecondaryLinks.links = links;
+    }
+
+    function setupWithoutBottomStartLinks(){
+
+      var sections = {
+        openInNewTab: true,
+        selectedIndex:0,
+        options:[{
+          title:"International Destinations",
+          options:[
+            {title:"Abu Dhabi Hotels",url:"https://google.com" },
+            {title:"AC Hotels",url:"https://google.com" },
+            {title:"AccorHotels",url:"https://google.com" },
+            {title:"Ace Hotel",url:"https://google.com" },
+            {title:"Adagio (hotel)",url:"https://google.com" },
+            {title:"Aerowisata",url:"https://google.com" },
+            {title:"Affinia Hotel",url:"https://google.com" },
+            {title:"Aitken Spence",url:"https://google.com" },
+            {title:"AJ Capital",url:"https://google.com" },
+            {title:"Allegro Resorts",url:"https://google.com" },
+            {title:"Aloft Hotels",url:"https://google.com" },
+            {title:"Aman Resorts",url:"https://google.com" },
+            {title:"Amari Hotels ",url:"https://google.com" },
+            {title:"America's Best ",url:"https://google.com" },
+            {title:"AmericInn",url:"https://google.com" },
+            {title:"AMResorts",url:"https://google.com" },
+            {title:"APA Group",url:"https://google.com" },
+            {title:"Aqua Hotels ",url:"https://google.com" },
+            {title:"Aqueen Hotels",url:"https://google.com" },
+            {title:"Archipelago International",url:"https://google.com" },
+            {title:"Arp-Hansen Hotel ",url:"https://google.com" },
+            {title:"Autograph Hotels",url:"https://google.com" },
+            {title:"Azimut Hotels",url:"https://google.com" }
+          ]
+        },
+        {
+          title:"Domestic Flights",
+          options:[
+            {title:"Abu Dhabi Hotels",url:"https://google.com" },
+            {title:"AC Hotels",url:"https://google.com" },
+            {title:"AccorHotels",url:"https://google.com" },
+            {title:"Ace Hotel",url:"https://google.com" },
+            {title:"Adagio (hotel)",url:"https://google.com" },
+            {title:"Aerowisata",url:"https://google.com" },
+            {title:"Affinia Hotel",url:"https://google.com" },
+            {title:"Aitken Spence",url:"https://google.com" },
+            {title:"AJ Capital",url:"https://google.com" },
+            {title:"Allegro Resorts",url:"https://google.com" },
+            {title:"Aloft Hotels",url:"https://google.com" },
+            {title:"Aman Resorts",url:"https://google.com" },
+            {title:"Amari Hotels ",url:"https://google.com" },
+            {title:"America's Best ",url:"https://google.com" },
+            {title:"AmericInn",url:"https://google.com" },
+            {title:"AMResorts",url:"https://google.com" },
+            {title:"APA Group",url:"https://google.com" },
+            {title:"Aqua Hotels ",url:"https://google.com" },
+            {title:"Aqueen Hotels",url:"https://google.com" },
+            {title:"Archipelago International",url:"https://google.com" },
+            {title:"Arp-Hansen Hotel ",url:"https://google.com" },
+            {title:"Autograph Hotels",url:"https://google.com" },
+            {title:"Azimut Hotels",url:"https://google.com" }
+          ]
+        },
+        {
+          title:"International Flights",
+          options:[
+            {title:"Abu Dhabi Hotels",url:"https://google.com" },
+            {title:"AC Hotels",url:"https://google.com" },
+            {title:"AccorHotels",url:"https://google.com" },
+            {title:"Ace Hotel",url:"https://google.com" },
+            {title:"Adagio (hotel)",url:"https://google.com" },
+            {title:"Aerowisata",url:"https://google.com" },
+            {title:"Affinia Hotel",url:"https://google.com" },
+            {title:"Aitken Spence",url:"https://google.com" },
+            {title:"AJ Capital",url:"https://google.com" },
+            {title:"Allegro Resorts",url:"https://google.com" },
+            {title:"Aloft Hotels",url:"https://google.com" },
+            {title:"Aman Resorts",url:"https://google.com" },
+            {title:"Amari Hotels ",url:"https://google.com" },
+            {title:"America's Best ",url:"https://google.com" },
+            {title:"AmericInn",url:"https://google.com" },
+            {title:"AMResorts",url:"https://google.com" },
+            {title:"APA Group",url:"https://google.com" },
+            {title:"Aqua Hotels ",url:"https://google.com" },
+            {title:"Aqueen Hotels",url:"https://google.com" },
+            {title:"Archipelago International",url:"https://google.com" },
+            {title:"Arp-Hansen Hotel ",url:"https://google.com" },
+            {title:"Autograph Hotels",url:"https://google.com" },
+            {title:"Azimut Hotels",url:"https://google.com" }
+          ]
+        },
+        {
+          title: "Domestic Destinations",
+          options:[
+            {title:"Abu Dhabi Hotels",url:"https://google.com" },
+            {title:"AC Hotels",url:"https://google.com" },
+            {title:"AccorHotels",url:"https://google.com" },
+            {title:"Ace Hotel",url:"https://google.com" },
+            {title:"Adagio (hotel)",url:"https://google.com" },
+            {title:"Aerowisata",url:"https://google.com" },
+            {title:"Affinia Hotel",url:"https://google.com" },
+            {title:"Aitken Spence",url:"https://google.com" },
+            {title:"AJ Capital",url:"https://google.com" },
+            {title:"Allegro Resorts",url:"https://google.com" },
+            {title:"Aloft Hotels",url:"https://google.com" },
+            {title:"Aman Resorts",url:"https://google.com" },
+            {title:"Amari Hotels ",url:"https://google.com" },
+            {title:"America's Best ",url:"https://google.com" },
+            {title:"AmericInn",url:"https://google.com" },
+            {title:"AMResorts",url:"https://google.com" },
+            {title:"APA Group",url:"https://google.com" },
+            {title:"Aqua Hotels ",url:"https://google.com" },
+            {title:"Aqueen Hotels",url:"https://google.com" },
+            {title:"Archipelago International",url:"https://google.com" },
+            {title:"Arp-Hansen Hotel ",url:"https://google.com" },
+            {title:"Autograph Hotels",url:"https://google.com" },
+            {title:"Azimut Hotels",url:"https://google.com" }
+          ]
+        },
+        {
+          title:"Popular Activities",
+          options:[
+            {title:"Abu Dhabi Hotels",url:"https://google.com" },
+            {title:"AC Hotels",url:"https://google.com" },
+            {title:"AccorHotels",url:"https://google.com" },
+            {title:"Ace Hotel",url:"https://google.com" },
+            {title:"Adagio (hotel)",url:"https://google.com" },
+            {title:"Aerowisata",url:"https://google.com" },
+            {title:"Affinia Hotel",url:"https://google.com" },
+            {title:"Aitken Spence",url:"https://google.com" },
+            {title:"AJ Capital",url:"https://google.com" },
+            {title:"Allegro Resorts",url:"https://google.com" },
+            {title:"Aloft Hotels",url:"https://google.com" },
+            {title:"Aman Resorts",url:"https://google.com" },
+            {title:"Amari Hotels ",url:"https://google.com" },
+            {title:"America's Best ",url:"https://google.com" },
+            {title:"AmericInn",url:"https://google.com" },
+            {title:"AMResorts",url:"https://google.com" },
+            {title:"APA Group",url:"https://google.com" },
+            {title:"Aqua Hotels ",url:"https://google.com" },
+            {title:"Aqueen Hotels",url:"https://google.com" },
+            {title:"Archipelago International",url:"https://google.com" },
+            {title:"Arp-Hansen Hotel ",url:"https://google.com" },
+            {title:"Autograph Hotels",url:"https://google.com" },
+            {title:"Azimut Hotels",url:"https://google.com" }
+          ]
+        }
+      ]};
+
+      var links={
+        "primaryLinks": {
+          "title": "Contact Us",
+          "options": [
+            {
+              "title": "Ph.:",
+              "options": [
+                {
+                  "title": "+215 (801) 4567",
+                  "url": "tel:+2158014567"
+                },
+                {
+                  "title": "+215 (802) 6789",
+                  "url": "tel:+2158026789"
+                }
+              ]
+            },
+            {
+              "title": "Fax:",
+              "options": [
+                {
+                  "title": "215-123-7890",
+                  "url": "tel:+2151237890"
+                }
+              ]
+            },
+            {
+              "title": "Email:",
+              "options": [
+                {
+                  "title": "enquiry@travelnxt.com",
+                  "url": "mailto:enquiry@travelnxt.com"
+                }
+              ]
+            }
+          ]
+        },
+        "secondaryLinks": {
+          "title": "Follow Us",
+          "options": [
+            {
+              "icon":  'https://image.flaticon.com/icons/svg/174/174855.svg',
+              "url": "http://fb.com/abcd"
+            },
+            {
+              "icon":  'https://image.flaticon.com/icons/svg/174/174848.svg',
+              "url": "http://twitter.com/abcd"
+            }
+          ]
+        },
+        bottomEndLinks: [
+          {
+            //since no url is gives so it should show up as title not an anchor
+            "title": "@ 2017 Mystique All rights reserved"
+          }
+        ]
+      };
+
+      footerWithoutBottomStartLinks = fixture('footerWithoutBottomStartLinks');
+      footerWithoutBottomStartLinks.sections = sections;
+      footerWithoutBottomStartLinks.links = links;
+    }
+
+    function setupFooterWithoutBottomEndLinks(){
+
+      var sections = {
+        openInNewTab: true,
+        selectedIndex:0,
+        options:[{
+          title:"International Destinations",
+          options:[
+            {title:"Abu Dhabi Hotels",url:"https://google.com" },
+            {title:"AC Hotels",url:"https://google.com" },
+            {title:"AccorHotels",url:"https://google.com" },
+            {title:"Ace Hotel",url:"https://google.com" },
+            {title:"Adagio (hotel)",url:"https://google.com" },
+            {title:"Aerowisata",url:"https://google.com" },
+            {title:"Affinia Hotel",url:"https://google.com" },
+            {title:"Aitken Spence",url:"https://google.com" },
+            {title:"AJ Capital",url:"https://google.com" },
+            {title:"Allegro Resorts",url:"https://google.com" },
+            {title:"Aloft Hotels",url:"https://google.com" },
+            {title:"Aman Resorts",url:"https://google.com" },
+            {title:"Amari Hotels ",url:"https://google.com" },
+            {title:"America's Best ",url:"https://google.com" },
+            {title:"AmericInn",url:"https://google.com" },
+            {title:"AMResorts",url:"https://google.com" },
+            {title:"APA Group",url:"https://google.com" },
+            {title:"Aqua Hotels ",url:"https://google.com" },
+            {title:"Aqueen Hotels",url:"https://google.com" },
+            {title:"Archipelago International",url:"https://google.com" },
+            {title:"Arp-Hansen Hotel ",url:"https://google.com" },
+            {title:"Autograph Hotels",url:"https://google.com" },
+            {title:"Azimut Hotels",url:"https://google.com" }
+          ]
+        },
+        {
+          title:"Domestic Flights",
+          options:[
+            {title:"Abu Dhabi Hotels",url:"https://google.com" },
+            {title:"AC Hotels",url:"https://google.com" },
+            {title:"AccorHotels",url:"https://google.com" },
+            {title:"Ace Hotel",url:"https://google.com" },
+            {title:"Adagio (hotel)",url:"https://google.com" },
+            {title:"Aerowisata",url:"https://google.com" },
+            {title:"Affinia Hotel",url:"https://google.com" },
+            {title:"Aitken Spence",url:"https://google.com" },
+            {title:"AJ Capital",url:"https://google.com" },
+            {title:"Allegro Resorts",url:"https://google.com" },
+            {title:"Aloft Hotels",url:"https://google.com" },
+            {title:"Aman Resorts",url:"https://google.com" },
+            {title:"Amari Hotels ",url:"https://google.com" },
+            {title:"America's Best ",url:"https://google.com" },
+            {title:"AmericInn",url:"https://google.com" },
+            {title:"AMResorts",url:"https://google.com" },
+            {title:"APA Group",url:"https://google.com" },
+            {title:"Aqua Hotels ",url:"https://google.com" },
+            {title:"Aqueen Hotels",url:"https://google.com" },
+            {title:"Archipelago International",url:"https://google.com" },
+            {title:"Arp-Hansen Hotel ",url:"https://google.com" },
+            {title:"Autograph Hotels",url:"https://google.com" },
+            {title:"Azimut Hotels",url:"https://google.com" }
+          ]
+        },
+        {
+          title:"International Flights",
+          options:[
+            {title:"Abu Dhabi Hotels",url:"https://google.com" },
+            {title:"AC Hotels",url:"https://google.com" },
+            {title:"AccorHotels",url:"https://google.com" },
+            {title:"Ace Hotel",url:"https://google.com" },
+            {title:"Adagio (hotel)",url:"https://google.com" },
+            {title:"Aerowisata",url:"https://google.com" },
+            {title:"Affinia Hotel",url:"https://google.com" },
+            {title:"Aitken Spence",url:"https://google.com" },
+            {title:"AJ Capital",url:"https://google.com" },
+            {title:"Allegro Resorts",url:"https://google.com" },
+            {title:"Aloft Hotels",url:"https://google.com" },
+            {title:"Aman Resorts",url:"https://google.com" },
+            {title:"Amari Hotels ",url:"https://google.com" },
+            {title:"America's Best ",url:"https://google.com" },
+            {title:"AmericInn",url:"https://google.com" },
+            {title:"AMResorts",url:"https://google.com" },
+            {title:"APA Group",url:"https://google.com" },
+            {title:"Aqua Hotels ",url:"https://google.com" },
+            {title:"Aqueen Hotels",url:"https://google.com" },
+            {title:"Archipelago International",url:"https://google.com" },
+            {title:"Arp-Hansen Hotel ",url:"https://google.com" },
+            {title:"Autograph Hotels",url:"https://google.com" },
+            {title:"Azimut Hotels",url:"https://google.com" }
+          ]
+        },
+        {
+          title: "Domestic Destinations",
+          options:[
+            {title:"Abu Dhabi Hotels",url:"https://google.com" },
+            {title:"AC Hotels",url:"https://google.com" },
+            {title:"AccorHotels",url:"https://google.com" },
+            {title:"Ace Hotel",url:"https://google.com" },
+            {title:"Adagio (hotel)",url:"https://google.com" },
+            {title:"Aerowisata",url:"https://google.com" },
+            {title:"Affinia Hotel",url:"https://google.com" },
+            {title:"Aitken Spence",url:"https://google.com" },
+            {title:"AJ Capital",url:"https://google.com" },
+            {title:"Allegro Resorts",url:"https://google.com" },
+            {title:"Aloft Hotels",url:"https://google.com" },
+            {title:"Aman Resorts",url:"https://google.com" },
+            {title:"Amari Hotels ",url:"https://google.com" },
+            {title:"America's Best ",url:"https://google.com" },
+            {title:"AmericInn",url:"https://google.com" },
+            {title:"AMResorts",url:"https://google.com" },
+            {title:"APA Group",url:"https://google.com" },
+            {title:"Aqua Hotels ",url:"https://google.com" },
+            {title:"Aqueen Hotels",url:"https://google.com" },
+            {title:"Archipelago International",url:"https://google.com" },
+            {title:"Arp-Hansen Hotel ",url:"https://google.com" },
+            {title:"Autograph Hotels",url:"https://google.com" },
+            {title:"Azimut Hotels",url:"https://google.com" }
+          ]
+        },
+        {
+          title:"Popular Activities",
+          options:[
+            {title:"Abu Dhabi Hotels",url:"https://google.com" },
+            {title:"AC Hotels",url:"https://google.com" },
+            {title:"AccorHotels",url:"https://google.com" },
+            {title:"Ace Hotel",url:"https://google.com" },
+            {title:"Adagio (hotel)",url:"https://google.com" },
+            {title:"Aerowisata",url:"https://google.com" },
+            {title:"Affinia Hotel",url:"https://google.com" },
+            {title:"Aitken Spence",url:"https://google.com" },
+            {title:"AJ Capital",url:"https://google.com" },
+            {title:"Allegro Resorts",url:"https://google.com" },
+            {title:"Aloft Hotels",url:"https://google.com" },
+            {title:"Aman Resorts",url:"https://google.com" },
+            {title:"Amari Hotels ",url:"https://google.com" },
+            {title:"America's Best ",url:"https://google.com" },
+            {title:"AmericInn",url:"https://google.com" },
+            {title:"AMResorts",url:"https://google.com" },
+            {title:"APA Group",url:"https://google.com" },
+            {title:"Aqua Hotels ",url:"https://google.com" },
+            {title:"Aqueen Hotels",url:"https://google.com" },
+            {title:"Archipelago International",url:"https://google.com" },
+            {title:"Arp-Hansen Hotel ",url:"https://google.com" },
+            {title:"Autograph Hotels",url:"https://google.com" },
+            {title:"Azimut Hotels",url:"https://google.com" }
+          ]
+        }
+      ]};
+
+      var links={
+        "primaryLinks": {
+          "title": "Contact Us",
+          "options": [
+            {
+              "title": "Ph.:",
+              "options": [
+                {
+                  "title": "+215 (801) 4567",
+                  "url": "tel:+2158014567"
+                },
+                {
+                  "title": "+215 (802) 6789",
+                  "url": "tel:+2158026789"
+                }
+              ]
+            },
+            {
+              "title": "Fax:",
+              "options": [
+                {
+                  "title": "215-123-7890",
+                  "url": "tel:+2151237890"
+                }
+              ]
+            },
+            {
+              "title": "Email:",
+              "options": [
+                {
+                  "title": "enquiry@travelnxt.com",
+                  "url": "mailto:enquiry@travelnxt.com"
+                }
+              ]
+            }
+          ]
+        },
+        "secondaryLinks": {
+          "title": "Follow Us",
+          "options": [
+            {
+              "icon":  'https://image.flaticon.com/icons/svg/174/174855.svg',
+              "url": "http://fb.com/abcd"
+            },
+            {
+              "icon":  'https://image.flaticon.com/icons/svg/174/174848.svg',
+              "url": "http://twitter.com/abcd"
+            }
+          ]
+        },
+        "bottomStartLinks": [
+          {
+            title: 'Developer API',
+            url:''
+          },
+          {
+            title:'About Us',
+            url:''
+          },
+          {
+            title:'Privacy Policy',
+            url:''
+          },
+          {
+            title:'Terms Of Use',
+            url:''
+          },
+          {
+            title:'Legal Disclamer',
+            url:''
+          },
+          {
+            title:'Contact Us',
+            url:'',
+            openInNewTab: false
+          }
+        ],
+      };
+
+      footerWithoutBottomEndLinks = fixture('footerWithoutBottomEndLinks');
+      footerWithoutBottomEndLinks.sections = sections;
+      footerWithoutBottomEndLinks.links = links;
+    }
+
+    function setupBasicFooter(){
+      var sections = {
+        openInNewTab: true,
+        selectedIndex:0,
+        options:[{
+          title:"International Destinations",
+          options:[
+            {title:"Abu Dhabi Hotels",url:"https://google.com" },
+            {title:"AC Hotels",url:"https://google.com" },
+            {title:"AccorHotels",url:"https://google.com" },
+            {title:"Ace Hotel",url:"https://google.com" },
+            {title:"Adagio (hotel)",url:"https://google.com" },
+            {title:"Aerowisata",url:"https://google.com" },
+            {title:"Affinia Hotel",url:"https://google.com" },
+            {title:"Aitken Spence",url:"https://google.com" },
+            {title:"AJ Capital",url:"https://google.com" },
+            {title:"Allegro Resorts",url:"https://google.com" },
+            {title:"Aloft Hotels",url:"https://google.com" },
+            {title:"Aman Resorts",url:"https://google.com" },
+            {title:"Amari Hotels ",url:"https://google.com" },
+            {title:"America's Best ",url:"https://google.com" },
+            {title:"AmericInn",url:"https://google.com" },
+            {title:"AMResorts",url:"https://google.com" },
+            {title:"APA Group",url:"https://google.com" },
+            {title:"Aqua Hotels ",url:"https://google.com" },
+            {title:"Aqueen Hotels",url:"https://google.com" },
+            {title:"Archipelago International",url:"https://google.com" },
+            {title:"Arp-Hansen Hotel ",url:"https://google.com" },
+            {title:"Autograph Hotels",url:"https://google.com" },
+            {title:"Azimut Hotels",url:"https://google.com" }
+          ]
+        },
+        {
+          title:"Domestic Flights",
+          options:[
+            {title:"Abu Dhabi Hotels",url:"https://google.com" },
+            {title:"AC Hotels",url:"https://google.com" },
+            {title:"AccorHotels",url:"https://google.com" },
+            {title:"Ace Hotel",url:"https://google.com" },
+            {title:"Adagio (hotel)",url:"https://google.com" },
+            {title:"Aerowisata",url:"https://google.com" },
+            {title:"Affinia Hotel",url:"https://google.com" },
+            {title:"Aitken Spence",url:"https://google.com" },
+            {title:"AJ Capital",url:"https://google.com" },
+            {title:"Allegro Resorts",url:"https://google.com" },
+            {title:"Aloft Hotels",url:"https://google.com" },
+            {title:"Aman Resorts",url:"https://google.com" },
+            {title:"Amari Hotels ",url:"https://google.com" },
+            {title:"America's Best ",url:"https://google.com" },
+            {title:"AmericInn",url:"https://google.com" },
+            {title:"AMResorts",url:"https://google.com" },
+            {title:"APA Group",url:"https://google.com" },
+            {title:"Aqua Hotels ",url:"https://google.com" },
+            {title:"Aqueen Hotels",url:"https://google.com" },
+            {title:"Archipelago International",url:"https://google.com" },
+            {title:"Arp-Hansen Hotel ",url:"https://google.com" },
+            {title:"Autograph Hotels",url:"https://google.com" },
+            {title:"Azimut Hotels",url:"https://google.com" }
+          ]
+        },
+        {
+          title:"International Flights",
+          options:[
+            {title:"Abu Dhabi Hotels",url:"https://google.com" },
+            {title:"AC Hotels",url:"https://google.com" },
+            {title:"AccorHotels",url:"https://google.com" },
+            {title:"Ace Hotel",url:"https://google.com" },
+            {title:"Adagio (hotel)",url:"https://google.com" },
+            {title:"Aerowisata",url:"https://google.com" },
+            {title:"Affinia Hotel",url:"https://google.com" },
+            {title:"Aitken Spence",url:"https://google.com" },
+            {title:"AJ Capital",url:"https://google.com" },
+            {title:"Allegro Resorts",url:"https://google.com" },
+            {title:"Aloft Hotels",url:"https://google.com" },
+            {title:"Aman Resorts",url:"https://google.com" },
+            {title:"Amari Hotels ",url:"https://google.com" },
+            {title:"America's Best ",url:"https://google.com" },
+            {title:"AmericInn",url:"https://google.com" },
+            {title:"AMResorts",url:"https://google.com" },
+            {title:"APA Group",url:"https://google.com" },
+            {title:"Aqua Hotels ",url:"https://google.com" },
+            {title:"Aqueen Hotels",url:"https://google.com" },
+            {title:"Archipelago International",url:"https://google.com" },
+            {title:"Arp-Hansen Hotel ",url:"https://google.com" },
+            {title:"Autograph Hotels",url:"https://google.com" },
+            {title:"Azimut Hotels",url:"https://google.com" }
+          ]
+        },
+        {
+          title: "Domestic Destinations",
+          options:[
+            {title:"Abu Dhabi Hotels",url:"https://google.com" },
+            {title:"AC Hotels",url:"https://google.com" },
+            {title:"AccorHotels",url:"https://google.com" },
+            {title:"Ace Hotel",url:"https://google.com" },
+            {title:"Adagio (hotel)",url:"https://google.com" },
+            {title:"Aerowisata",url:"https://google.com" },
+            {title:"Affinia Hotel",url:"https://google.com" },
+            {title:"Aitken Spence",url:"https://google.com" },
+            {title:"AJ Capital",url:"https://google.com" },
+            {title:"Allegro Resorts",url:"https://google.com" },
+            {title:"Aloft Hotels",url:"https://google.com" },
+            {title:"Aman Resorts",url:"https://google.com" },
+            {title:"Amari Hotels ",url:"https://google.com" },
+            {title:"America's Best ",url:"https://google.com" },
+            {title:"AmericInn",url:"https://google.com" },
+            {title:"AMResorts",url:"https://google.com" },
+            {title:"APA Group",url:"https://google.com" },
+            {title:"Aqua Hotels ",url:"https://google.com" },
+            {title:"Aqueen Hotels",url:"https://google.com" },
+            {title:"Archipelago International",url:"https://google.com" },
+            {title:"Arp-Hansen Hotel ",url:"https://google.com" },
+            {title:"Autograph Hotels",url:"https://google.com" },
+            {title:"Azimut Hotels",url:"https://google.com" }
+          ]
+        },
+        {
+          title:"Popular Activities",
+          options:[
+            {title:"Abu Dhabi Hotels",url:"https://google.com" },
+            {title:"AC Hotels",url:"https://google.com" },
+            {title:"AccorHotels",url:"https://google.com" },
+            {title:"Ace Hotel",url:"https://google.com" },
+            {title:"Adagio (hotel)",url:"https://google.com" },
+            {title:"Aerowisata",url:"https://google.com" },
+            {title:"Affinia Hotel",url:"https://google.com" },
+            {title:"Aitken Spence",url:"https://google.com" },
+            {title:"AJ Capital",url:"https://google.com" },
+            {title:"Allegro Resorts",url:"https://google.com" },
+            {title:"Aloft Hotels",url:"https://google.com" },
+            {title:"Aman Resorts",url:"https://google.com" },
+            {title:"Amari Hotels ",url:"https://google.com" },
+            {title:"America's Best ",url:"https://google.com" },
+            {title:"AmericInn",url:"https://google.com" },
+            {title:"AMResorts",url:"https://google.com" },
+            {title:"APA Group",url:"https://google.com" },
+            {title:"Aqua Hotels ",url:"https://google.com" },
+            {title:"Aqueen Hotels",url:"https://google.com" },
+            {title:"Archipelago International",url:"https://google.com" },
+            {title:"Arp-Hansen Hotel ",url:"https://google.com" },
+            {title:"Autograph Hotels",url:"https://google.com" },
+            {title:"Azimut Hotels",url:"https://google.com" }
+          ]
+        }
+      ]};
+      var links={
+        "primaryLinks": {
+          "title": "Contact Us",
+          "options": [
+            {
+              "title": "Ph.:",
+              "options": [
+                {
+                  "title": "+215 (801) 4567",
+                  "url": "tel:+2158014567"
+                },
+                {
+                  "title": "+215 (802) 6789",
+                  "url": "tel:+2158026789"
+                }
+              ]
+            },
+            {
+              "title": "Fax:",
+              "options": [
+                {
+                  "title": "215-123-7890",
+                  "url": "tel:+2151237890"
+                }
+              ]
+            },
+            {
+              "title": "Email:",
+              "options": [
+                {
+                  "title": "enquiry@travelnxt.com",
+                  "url": "mailto:enquiry@travelnxt.com"
+                }
+              ]
+            }
+          ]
+        },
+        "secondaryLinks": {
+          "title": "Follow Us",
+          "options": [
+            {
+              "icon":  'https://image.flaticon.com/icons/svg/174/174855.svg',
+              "url": "http://fb.com/abcd"
+            },
+            {
+              "icon":  'https://image.flaticon.com/icons/svg/174/174848.svg',
+              "url": "http://twitter.com/abcd"
+            },
+            {
+              "icon":  'https://image.flaticon.com/icons/svg/174/174855.svg',
+              "url": "http://fb.com/abcd"
+            },
+            {
+              "icon":  'https://image.flaticon.com/icons/svg/174/174848.svg',
+              "url": "http://twitter.com/abcd"
+            },
+            {
+              "icon":  'https://image.flaticon.com/icons/svg/174/174855.svg',
+              "url": "http://fb.com/abcd"
+            },
+            {
+              "icon":  'https://image.flaticon.com/icons/svg/174/174848.svg',
+              "url": "http://twitter.com/abcd"
+            }
+          ]
+        },
+        "bottomStartLinks": [
+          {
+            title: 'Developer API',
+            url:''
+          },
+          {
+            title:'About Us',
+            url:''
+          },
+          {
+            title:'Privacy Policy',
+            url:''
+          },
+          {
+            title:'Terms Of Use',
+            url:''
+          },
+          {
+            title:'Legal Disclamer',
+            url:''
+          },
+          {
+            title:'Contact Us',
+            url:'',
+            openInNewTab: false
+          }
+        ],
+        bottomEndLinks: [
+          {
+            //since no url is gives so it should show up as title not an anchor
+            "title": "@ 2017 Mystique All rights reserved"
+          }
+        ]
+      };
+
+      footer = fixture('basic');
+      footer.sections = sections;
+      footer.links = links;
+    }
+
+    function setupFooterWithoutPrimaryAndSecondaryLinks(){
+      var sections = {
+        openInNewTab: true,
+        selectedIndex:0,
+        options:[{
+          title:"International Destinations",
+          options:[
+            {title:"Abu Dhabi Hotels",url:"https://google.com" },
+            {title:"AC Hotels",url:"https://google.com" },
+            {title:"AccorHotels",url:"https://google.com" },
+            {title:"Ace Hotel",url:"https://google.com" },
+            {title:"Adagio (hotel)",url:"https://google.com" },
+            {title:"Aerowisata",url:"https://google.com" },
+            {title:"Affinia Hotel",url:"https://google.com" },
+            {title:"Aitken Spence",url:"https://google.com" },
+            {title:"AJ Capital",url:"https://google.com" },
+            {title:"Allegro Resorts",url:"https://google.com" },
+            {title:"Aloft Hotels",url:"https://google.com" },
+            {title:"Aman Resorts",url:"https://google.com" },
+            {title:"Amari Hotels ",url:"https://google.com" },
+            {title:"America's Best ",url:"https://google.com" },
+            {title:"AmericInn",url:"https://google.com" },
+            {title:"AMResorts",url:"https://google.com" },
+            {title:"APA Group",url:"https://google.com" },
+            {title:"Aqua Hotels ",url:"https://google.com" },
+            {title:"Aqueen Hotels",url:"https://google.com" },
+            {title:"Archipelago International",url:"https://google.com" },
+            {title:"Arp-Hansen Hotel ",url:"https://google.com" },
+            {title:"Autograph Hotels",url:"https://google.com" },
+            {title:"Azimut Hotels",url:"https://google.com" }
+          ]
+        },
+        {
+          title:"Domestic Flights",
+          options:[
+            {title:"Abu Dhabi Hotels",url:"https://google.com" },
+            {title:"AC Hotels",url:"https://google.com" },
+            {title:"AccorHotels",url:"https://google.com" },
+            {title:"Ace Hotel",url:"https://google.com" },
+            {title:"Adagio (hotel)",url:"https://google.com" },
+            {title:"Aerowisata",url:"https://google.com" },
+            {title:"Affinia Hotel",url:"https://google.com" },
+            {title:"Aitken Spence",url:"https://google.com" },
+            {title:"AJ Capital",url:"https://google.com" },
+            {title:"Allegro Resorts",url:"https://google.com" },
+            {title:"Aloft Hotels",url:"https://google.com" },
+            {title:"Aman Resorts",url:"https://google.com" },
+            {title:"Amari Hotels ",url:"https://google.com" },
+            {title:"America's Best ",url:"https://google.com" },
+            {title:"AmericInn",url:"https://google.com" },
+            {title:"AMResorts",url:"https://google.com" },
+            {title:"APA Group",url:"https://google.com" },
+            {title:"Aqua Hotels ",url:"https://google.com" },
+            {title:"Aqueen Hotels",url:"https://google.com" },
+            {title:"Archipelago International",url:"https://google.com" },
+            {title:"Arp-Hansen Hotel ",url:"https://google.com" },
+            {title:"Autograph Hotels",url:"https://google.com" },
+            {title:"Azimut Hotels",url:"https://google.com" }
+          ]
+        },
+        {
+          title:"International Flights",
+          options:[
+            {title:"Abu Dhabi Hotels",url:"https://google.com" },
+            {title:"AC Hotels",url:"https://google.com" },
+            {title:"AccorHotels",url:"https://google.com" },
+            {title:"Ace Hotel",url:"https://google.com" },
+            {title:"Adagio (hotel)",url:"https://google.com" },
+            {title:"Aerowisata",url:"https://google.com" },
+            {title:"Affinia Hotel",url:"https://google.com" },
+            {title:"Aitken Spence",url:"https://google.com" },
+            {title:"AJ Capital",url:"https://google.com" },
+            {title:"Allegro Resorts",url:"https://google.com" },
+            {title:"Aloft Hotels",url:"https://google.com" },
+            {title:"Aman Resorts",url:"https://google.com" },
+            {title:"Amari Hotels ",url:"https://google.com" },
+            {title:"America's Best ",url:"https://google.com" },
+            {title:"AmericInn",url:"https://google.com" },
+            {title:"AMResorts",url:"https://google.com" },
+            {title:"APA Group",url:"https://google.com" },
+            {title:"Aqua Hotels ",url:"https://google.com" },
+            {title:"Aqueen Hotels",url:"https://google.com" },
+            {title:"Archipelago International",url:"https://google.com" },
+            {title:"Arp-Hansen Hotel ",url:"https://google.com" },
+            {title:"Autograph Hotels",url:"https://google.com" },
+            {title:"Azimut Hotels",url:"https://google.com" }
+          ]
+        },
+        {
+          title: "Domestic Destinations",
+          options:[
+            {title:"Abu Dhabi Hotels",url:"https://google.com" },
+            {title:"AC Hotels",url:"https://google.com" },
+            {title:"AccorHotels",url:"https://google.com" },
+            {title:"Ace Hotel",url:"https://google.com" },
+            {title:"Adagio (hotel)",url:"https://google.com" },
+            {title:"Aerowisata",url:"https://google.com" },
+            {title:"Affinia Hotel",url:"https://google.com" },
+            {title:"Aitken Spence",url:"https://google.com" },
+            {title:"AJ Capital",url:"https://google.com" },
+            {title:"Allegro Resorts",url:"https://google.com" },
+            {title:"Aloft Hotels",url:"https://google.com" },
+            {title:"Aman Resorts",url:"https://google.com" },
+            {title:"Amari Hotels ",url:"https://google.com" },
+            {title:"America's Best ",url:"https://google.com" },
+            {title:"AmericInn",url:"https://google.com" },
+            {title:"AMResorts",url:"https://google.com" },
+            {title:"APA Group",url:"https://google.com" },
+            {title:"Aqua Hotels ",url:"https://google.com" },
+            {title:"Aqueen Hotels",url:"https://google.com" },
+            {title:"Archipelago International",url:"https://google.com" },
+            {title:"Arp-Hansen Hotel ",url:"https://google.com" },
+            {title:"Autograph Hotels",url:"https://google.com" },
+            {title:"Azimut Hotels",url:"https://google.com" }
+          ]
+        },
+        {
+          title:"Popular Activities",
+          options:[
+            {title:"Abu Dhabi Hotels",url:"https://google.com" },
+            {title:"AC Hotels",url:"https://google.com" },
+            {title:"AccorHotels",url:"https://google.com" },
+            {title:"Ace Hotel",url:"https://google.com" },
+            {title:"Adagio (hotel)",url:"https://google.com" },
+            {title:"Aerowisata",url:"https://google.com" },
+            {title:"Affinia Hotel",url:"https://google.com" },
+            {title:"Aitken Spence",url:"https://google.com" },
+            {title:"AJ Capital",url:"https://google.com" },
+            {title:"Allegro Resorts",url:"https://google.com" },
+            {title:"Aloft Hotels",url:"https://google.com" },
+            {title:"Aman Resorts",url:"https://google.com" },
+            {title:"Amari Hotels ",url:"https://google.com" },
+            {title:"America's Best ",url:"https://google.com" },
+            {title:"AmericInn",url:"https://google.com" },
+            {title:"AMResorts",url:"https://google.com" },
+            {title:"APA Group",url:"https://google.com" },
+            {title:"Aqua Hotels ",url:"https://google.com" },
+            {title:"Aqueen Hotels",url:"https://google.com" },
+            {title:"Archipelago International",url:"https://google.com" },
+            {title:"Arp-Hansen Hotel ",url:"https://google.com" },
+            {title:"Autograph Hotels",url:"https://google.com" },
+            {title:"Azimut Hotels",url:"https://google.com" }
+          ]
+        }
+      ]};
+      var links={
+        "bottomStartLinks": [
+          {
+            title: 'Developer API',
+            url:''
+          },
+          {
+            title:'About Us',
+            url:''
+          },
+          {
+            title:'Privacy Policy',
+            url:''
+          },
+          {
+            title:'Terms Of Use',
+            url:''
+          },
+          {
+            title:'Legal Disclamer',
+            url:''
+          },
+          {
+            title:'Contact Us',
+            url:'',
+            openInNewTab: false
+          }
+        ],
+        bottomEndLinks: [
+          {
+            //since no url is gives so it should show up as title not an anchor
+            "title": "@ 2017 Mystique All rights reserved"
+          }
+        ]
+      };
+
+      footerWithoutPrimaryAndSecondaryLinks = fixture('footerWithoutPrimaryAndSecondaryLinks');
+      footerWithoutPrimaryAndSecondaryLinks.sections = sections;
+      footerWithoutPrimaryAndSecondaryLinks.links = links;
+    }
+
+    function setupFooterWithoutSections(){
+      var links={
+        "primaryLinks": {
+          "title": "Contact Us",
+          "options": [
+            {
+              "title": "Ph.:",
+              "options": [
+                {
+                  "title": "+215 (801) 4567",
+                  "url": "tel:+2158014567"
+                },
+                {
+                  "title": "+215 (802) 6789",
+                  "url": "tel:+2158026789"
+                }
+              ]
+            },
+            {
+              "title": "Fax:",
+              "options": [
+                {
+                  "title": "215-123-7890",
+                  "url": "tel:+2151237890"
+                }
+              ]
+            },
+            {
+              "title": "Email:",
+              "options": [
+                {
+                  "title": "enquiry@travelnxt.com",
+                  "url": "mailto:enquiry@travelnxt.com"
+                }
+              ]
+            }
+          ]
+        },
+        "secondaryLinks": {
+          "title": "Follow Us",
+          "options": [
+            {
+              "icon":  'https://image.flaticon.com/icons/svg/174/174855.svg',
+              "url": "http://fb.com/abcd"
+            },
+            {
+              "icon":  'https://image.flaticon.com/icons/svg/174/174848.svg',
+              "url": "http://twitter.com/abcd"
+            }
+          ]
+        },
+        "bottomStartLinks": [
+          {
+            title: 'Developer API',
+            url:''
+          },
+          {
+            title:'About Us',
+            url:''
+          },
+          {
+            title:'Privacy Policy',
+            url:''
+          },
+          {
+            title:'Terms Of Use',
+            url:''
+          },
+          {
+            title:'Legal Disclamer',
+            url:''
+          },
+          {
+            title:'Contact Us',
+            url:'',
+            openInNewTab: false
+          }
+        ],
+        bottomEndLinks: [
+          {
+            //since no url is gives so it should show up as title not an anchor
+            "title": "@ 2017 Mystique All rights reserved"
+          }
+        ]
+      };
+
+      footerWithoutSections = fixture('footerWithoutSections');
+      footerWithoutSections.links = links;
+    }
+
+    setup(function(){
+      setupBasicFooter();
+      setupFooterWithoutPrimaryLinks();
+      setupFooterWithoutPrimaryAndSecondaryLinks();
+      setupFooterWithoutSecondaryLinks();
+      setupWithoutBottomStartLinks();
+      setupFooterWithoutBottomEndLinks();
+      setupFooterWithoutSections();
+    });
+
+    test('instantiating the element works', function() {
+      flush(function(){
+      assert.equal(footer.is, 't-footer');
+      assert.equal(footer._selected, footer.sections.selectedIndex);
+      });
+    });
+
+    test('should not display tabs and pages if sections is not provided', function() {
+      assert.equal(footerWithoutSections.querySelector('.tabs').hidden, true);
+    });
+
+    test('should not display primary links if its not provided', function() {
+      assert.equal(footerWithoutPrimaryLinks.querySelector('.primary-links').hidden, true);
+    });
+
+    test('should not display secondary links if its not provided', function() {
+      flush(function(){
+        assert.equal(footerWithSecondaryLinks.querySelectorAll('.secondary-links')[1].hidden, true);
+      });
+    });
+
+    test('should not display middle section if both primary & secondary links if its not provided', function() {
+      flush(function(){
+        assert.equal(footerWithoutPrimaryAndSecondaryLinks.querySelector('.links-section').hidden, true);
+      });
+    });
+
+    test('should separate secondary links in different row if items length > 5', function() {
+        var secondaryLinks= footer.querySelectorAll('.secondary-links');
+        assert.equal(secondaryLinks[0].hidden, true);
+        assert.equal(secondaryLinks[1].hidden, false);
+    });
+
+    test('if secondary links > 5 then both primary links & secondary links should be center justified', function() {
+        var secondaryLinks= footer.querySelectorAll('.secondary-links');
+        assert.equal(secondaryLinks[0].hidden, true);
+        assert.equal(secondaryLinks[1].classList.contains('center-justified') >=0, true);
+        assert.equal(footer.querySelector('.primary-links').classList.contains('center-justified') >=0, true);
+    });
+
+    test('should not display bottom start links if its not provided', function() {
+      assert.equal(footerWithoutBottomStartLinks.querySelector('.bottom-section').hidden, true);
+    });
+
+    test('should not display bottom end links if its not provided', function() {
+      flush(function(){
+        assert.equal(footerWithoutBottomEndLinks.querySelectorAll('.bottom-end-links')[1].hidden, true);
+      })
+    });
+
+    test('number of tabs should be equal to number of tabs', function() {
+      flush(function(){
+        var tabCount =  footer.querySelectorAll('paper-tab').length;
+        assert.equal(footer.sections.options.length, tabCount);
+      })
+    });
+
+    test('options present in section should be shown as list in iron-pages', function(){
+      flush(function(){
+        var items = footer.querySelector('.items');
+        assert.equal(items.querySelectorAll('li').length, footer.sections.options[0].options.length);
+      });
+    });
+
+    test('tab selectedIndex should reflet the current Tab', function(){
+      flush(function(){
+        var tabs = footer.querySelector('paper-tabs');
+        assert.equal(tabs.selected, footer.sections.selectedIndex);
+      });
+    });
+
+    test('fire event on tab changed', function(done){
+      footer.addEventListener('t-footer-section-changed', function(e){
+        assert.equal(true, true);
+        done();
+      })
+    });
+
+    test('getState should return the current footer state', function(){
+      flush(function(){
+        var state = footer.getState();
+        assert.deepEqual(state.data, footer.data);
+      });
+    });
+
+    test('should change selectedindex on t-footer-section-select event', function(done){
+      footer.fire('t-footer-section-select', {index: 3});
+      flush(function(){
+        assert.equal(footer.sections.selectedIndex, 3);
+        done();
+      });
+    });
+
+    test('should center align on mobile', function(){
+      var mq= footer.querySelector('iron-media-query');
+      mq.query = '(min-width: 1026px)';
+      assert.equal(true, true);
+    });
+  })
+  </script>
+
+</body>
+</html>

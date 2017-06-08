@@ -1,0 +1,301 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
+<link rel="import" href="../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
+<link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
+<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../bower_components/app-route/app-location.html">
+<link rel="import" href="../bower_components/app-route/app-route.html">
+<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="my-icons.html">
+<link rel="import" href="shared-styles.html">
+
+<link rel="import" href="../bower_components/t-header/t-header.html">
+<link rel="import" href="../bower_components/t-footer/t-footer.html">
+
+<link rel="import" href="data/deal-data.html">
+
+
+<dom-module id="my-app">
+  <template>
+    <style is="custom-style" include="shared-styles">
+       :host {}
+
+      .page {
+        min-height: 350px;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 10px 0px;
+      }
+    </style>
+
+    <app-location route="{{route}}"></app-location>
+    <app-route route="{{route}}" pattern="/:page" data="{{routeData}}" tail="{{subroute}}"></app-route>
+
+    <app-header-layout>
+      <app-header>
+        <t-header data="[[_headerData]]" user="[[_user]]"></t-header>
+      </app-header>
+
+
+
+      <div class="page">
+
+        <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="404" role="main">
+          <home-page name="home"></home-page>
+          <hotel-result-page name="hotel-result"></hotel-result-page>
+          <my-view404 name="404"></my-view404>
+        </iron-pages>
+
+      </div>
+
+
+      <t-footer links="[[_footerLinks]]" sections="[[_footerSections]]">
+      </t-footer>
+    </app-header-layout>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'my-app',
+
+      properties: {
+        page: {
+          type: String,
+          reflectToAttribute: true,
+          observer: '_pageChanged'
+        },
+        _headerData: {
+          type: Object,
+          value: function () {
+            return this._getHeaderData();
+          }
+        },
+        _footerLinks: {
+          type: Object,
+          value: function () {
+            return this._getFooterLinks()
+          }
+        },
+        _footerSections: {
+          type: Object,
+          value: function () {
+            return window.footerDealSection;
+          }
+        },
+        _user: {
+          type: Object,
+          value: {
+            "isLoggedIn": false,
+            "preLogin": {
+              "title": "Sign Up / Sign In",
+              "icon": "account-circle",
+              "code": "signup",
+              "url": "/register"
+            },
+            "postLogin": {
+              "title": "John Doe",
+              "icon": "account-circle",
+              "code": "signedin",
+              "type": "select",
+              "selectedItem": 0
+            }
+          }
+        }
+      },
+
+      observers: [
+        '_routePageChanged(routeData.page)'
+      ],
+
+      _routePageChanged: function (page) {
+        this.page = this.__getMapPage(page);
+      },
+
+      _pageChanged: function (page) {
+        // Load page import on demand. Show 404 page if fails
+        var resolvedPageUrl = this.resolveUrl(page + '-page.html');
+        this.importHref(resolvedPageUrl, null, this._showPage404, true);
+      },
+
+      _showPage404: function () {
+        this.page = '404';
+      },
+
+      __getMapPage: function (page) {
+        var mapPage = page.replace(/\//g, "-");
+        switch (page) {
+          case "":
+            mapPage = "home";
+            break;
+        }
+        return mapPage;
+      },
+
+      _getHeaderData: function () {
+        var data = {
+          logo: {
+            imageUrl: "http://www.tavisca.com/wp-content/uploads/travelnxt.png",
+            url: '/'
+          },
+          primaryMenu: {
+            selectedIndex: 0,
+            items: [
+              {
+                label: 'Hotel',
+                icon: 'maps:hotel'
+              }]
+          },
+          topLeftToolbar: [
+            {
+              "title": "1800-958-1000",
+              "icon": "communication:phone",
+              "url": "tel:18009581000"
+            },
+            {
+              "title": "enquiry@travelnxt.com",
+              "icon": "mail",
+              "url": "mailto:enquiry@travelnxt.com"
+            }
+          ],
+          topEndMenu: [
+            {
+              "code": "ctr-sel",
+              "label": "Country",
+              "isIconMenu": true,
+              "selectedItem": "0",
+              "eventName": "country_changed",
+              "options": [
+                { "icon": "/images/af.svg", "title": "United State(English)", "value": "en-us" },
+                { "icon": "/images/in.svg", "title": "India(English)", "value": "en-in" }
+              ]
+            },
+            {
+              "code": "currency-sel",
+              "isIconMenu": false,
+              "label": "Currency",
+              "selectedItem": "0",
+              "eventName": "currency_changed",
+              "options": [
+                { title: "Australian Dollar", value: "AUD" },
+                { title: "Brazilian Real ", value: "BRL" },
+                { title: "Danish Krone", value: "DKK" },
+                { title: "Czech Koruna", value: "CZK" },
+                { title: "Canadian Dollar", value: "CAD" },
+                { title: "US Dollar", value: "USD" }
+              ]
+            }
+          ],
+
+          mainToolbar: [
+            
+          ],
+          recentSearch: {
+
+          }
+        };
+        return data;
+      },
+
+      _getFooterLinks: function () {
+        return {
+          "primaryLinks": {
+            "title": "Contact Us",
+            "options": [
+              {
+                "title": "Ph.:",
+                "options": [
+                  {
+                    "title": "+215 (801) 4567",
+                    "url": "tel:+2158014567"
+                  },
+                  {
+                    "title": "+215 (802) 6789",
+                    "url": "tel:+2158026789"
+                  }
+                ]
+              },
+              {
+                "title": "Fax:",
+                "options": [
+                  {
+                    "title": "215-123-7890",
+                    "url": "tel:+2151237890"
+                  }
+                ]
+              },
+              {
+                "title": "Email:",
+                "options": [
+                  {
+                    "title": "enquiry@travelnxt.com",
+                    "url": "mailto:enquiry@travelnxt.com"
+                  }
+                ]
+              }
+            ]
+          },
+          "secondaryLinks": {
+            "title": "Follow Us",
+            "options": [
+              {
+                "icon": 'https://image.flaticon.com/icons/svg/174/174855.svg',
+                "url": ""
+              },
+              {
+                "icon": 'https://image.flaticon.com/icons/svg/174/174848.svg',
+                "url": ""
+              }
+            ]
+          },
+          "bottomStartLinks": [
+            {
+              "title": "About Us",
+              "url": ""
+            },
+            {
+              "title": "About Us",
+              "url": ""
+            },
+            {
+              "title": "Privacy Policy",
+              "url": ""
+            },
+            {
+              "title": "Terms Of Use",
+              "url": ""
+            },
+            {
+              "title": "Legal Disclamer",
+              "url": ""
+            },
+            {
+              "title": "Contact Us",
+              "url": "",
+              "openInNewTab": false
+            }
+          ],
+          "bottomEndLinks": [
+            {
+              "title": "@ 2017 Mystique All rights reserved"
+            }
+          ]
+        }
+      }
+
+    });
+  </script>
+</dom-module>

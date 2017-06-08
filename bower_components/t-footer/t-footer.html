@@ -1,0 +1,296 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="../paper-tabs/paper-tabs.html">
+<link rel="import" href="../iron-icon/iron-icon.html">
+<link rel="import" href="../iron-media-query/iron-media-query.html">
+<link rel="import" href="../paper-tabs/paper-tab.html">
+<link rel="import" href="../paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../paper-listbox/paper-listbox.html">
+<link rel="import" href="../iron-pages/iron-pages.html">
+<link rel="import" href="../paper-menu/paper-menu.html">
+<link rel="import" href="../paper-item/paper-icon-item.html">
+<link rel="import" href="../paper-item/paper-item.html">
+<link rel="import" href="../iron-icons/maps-icons.html">
+<link rel="import" href="../iron-icons/communication-icons.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="./t-footer-style.html">
+
+<!--
+  `t-footer`
+  Travelnxt Footer component Fully responsive Footer .
+
+  ### Styling
+
+  `<t-footer>` provides the following custom properties and mixins
+  for styling:
+
+  Custom property | Description | Default
+  ----------------|-------------|----------
+  `--t-footer-cols` | Number of columns | `6`
+  `--t-footer-section-bg` | Background color footer sections | `#9a9ca8`
+  `--t-footer-color` | Background color of tab content | `#465363`
+  `--t-footer-bg` | Background color footer | `#465363`
+  `--t-footer-selected-tab-color` | Text color of selected Tab | `#fff`
+  `--t-footer-tab-bg` | Background color of Tabs | `#39434f`
+  `--t-footer-tab-color` | Default tab text color| `#9a9ca8`
+  `--t-footer-link-title-color` | Title colors of primary & secondary links | `#fff`
+  `--t-footer-links-bg` | Background color of primary & secondary links| `#39434f`
+  `--t-footer-section-link` |  Mixin for section color | `{}`
+  `--t-footer-primary-link` |  Mixin for section color | `{}`
+  `--t-footer-secondary-link` |  Mixin for section color | `{}`
+  `--t-footer-bottom-link` |  Mixin for section color | `{}`
+
+	@group Travelnxt Elements
+	@element t-footer
+	@demo demo/index.html
+-->
+
+<dom-module id="t-footer">
+  <template>
+    <style is="custom-style" include="t-footer-style iron-flex iron-flex-alignment"></style>
+    <iron-media-query query="(min-width : 320px) and (max-width : 767px)" query-matches="{{_isMobile}}"></iron-media-query>
+    <iron-media-query query="(max-width: 1024px) and (min-width: 768px)" query-matches="{{_isTablet}}"></iron-media-query>
+
+    <div class="layout footer">
+      <paper-tabs hidden$="[[_hideIfNullOrEmpty(sections)]]" noink on-iron-select="_tabChanged" scrollable selected-class="selected-tab" class=" flex tabs" selected="{{_selected}}">
+        <template is="dom-repeat" items="[[sections.options]]">
+          <paper-tab>[[item.title]]</paper-tab>
+        </template>
+      </paper-tabs>
+
+      <iron-pages class="pages flex vertical layout " selected="{{_selected}}">
+        <template is="dom-repeat" items="[[sections.options]]">
+          <div>
+            <ul class="items">
+              <template is="dom-if" if="[[!sections.openInNewTab]]" >
+                <template is="dom-repeat" items="[[item.options]]" as="option">
+                  <li><a href$="[[option.url]]" class="section-link">[[option.title]]</a></li>
+                </template>
+              </template>
+              <template is="dom-if" if="[[sections.openInNewTab]]" >
+                <template is="dom-repeat" items="[[item.options]]" as="option">
+                  <li><a target="_blank" class="section-link" href$="[[option.url]]">[[option.title]]</a></li>
+                </template>
+              </template>
+            </ul>
+          </div>
+        </template>
+      </iron-pages>
+
+      <div hidden$="[[_hideIfPrimaryAndSecondaryLinksNotPresent(links)]]"  class$="[[_centerAlignIfResponsive(_notDesktop)]] layout links-section section">
+        <div hidden$="[[_hideIfNullOrEmpty(links.primaryLinks)]]" class$="[[ _centerAlignIfResponsive(_notDesktop) ]] flex layout primary-links" >
+          <div class="contact-label">[[links.primaryLinks.title]]</div>
+          <div class$="{{_centerAlignIfResponsive(_notDesktop)}} layout details" >
+            <template is="dom-repeat" items="[[links.primaryLinks.options]]" >
+              <div >[[item.title]]
+                <template is="dom-repeat" items="[[item.options]]" as="option" >
+                  <a href$="[[option.url]]" class="primary-link">[[option.title]]</a>
+                </template>
+              </div>
+            </template>
+          </div>
+        </div>
+        <div hidden$="[[_hideSectionIfOverflowOrSectionNotPresent(links, _notDesktop)]]" class$="[[_handleFollowAlignment(_isMobile) ]] wrap layout secondary-links" >
+          <div class="contact-label">[[links.secondaryLinks.title]]</div>
+          <div id="social" class="social-links">
+            <template is="dom-repeat" items="[[links.secondaryLinks.options]]">
+              <a href$="[[item.url]]" class="secondary-link"><iron-icon src="[[item.icon]]"></iron-icon></a>
+            </template>
+          </div>
+        </div>
+      </div>
+
+      <div hidden$="[[_hideSectionIfOverflowOrSectionNotPresent(links, _notDesktop, _toToggle)]]" class$="[[ _centerAlignIfResponsive(_notDesktop) ]] links-section layout secondary-links" >
+        <div class="contact-label">[[links.secondaryLinks.title]]</div>
+        <div class="social-links">
+          <template is="dom-repeat" items="[[links.secondaryLinks.options]]">
+            <a href$="[[item.url]]" class="secondary-link"><iron-icon src="[[item.icon]]"></iron-icon></a>
+          </template>
+        </div>
+      </div>
+      <div hidden$="[[_hideIfNoChildren]]" class="layout horizontal bottom-section section">
+        <content></content>
+      </div>
+      <div hidden$="[[_hideSectionIfDesktopOrNoStartLinks(links)]]" class="layout horizontal bottom-section section">
+        <div class$="{{_centerAlignIfResponsive(_notDesktop)}} flex layout bottom-start-links" >
+          <ul class="layout horizontal link-list ">
+            <template is="dom-repeat" items="[[links.bottomStartLinks]]">
+              <li><a href$="[[item.url]]" class="bottom-link">[[item.title]]</a></li>
+            </template>
+          </ul>
+        </div>
+
+        <div hidden$="[[_hideSectionIfDesktopOrNoStartLinks(links, _notDesktop)]]" class="copyright bottom-end-links end-justified">
+          <template is="dom-repeat" items="[[links.bottomEndLinks]]">
+            <a href$="[[item.url]]" class="bottom-link">[[item.title]]</a>
+          </template>
+        </div>
+      </div>
+      <div hidden$="[[!_hideSectionIfDesktopOrNoStartLinks(links, _notDesktop)]]" class="bottom-end-links bottom-section section horizontal layout center-justified">
+        <template is="dom-repeat" items="[[links.bottomEndLinks]]">
+          <a href$="[[item.url]]" class="bottom-link">[[item.title]]</a>
+        </template>
+      </div>
+    </div>
+  </template>
+
+  <script>
+Polymer({
+  is: 't-footer',
+
+  listeners:{
+    't-footer-section-select': '_changeSelectedSection'
+  },
+
+  properties: {
+/**
+		 * Fired when tab is changed
+		 *
+		 * @event t-footer-tab-changed
+		 * @param {Number} index Currently selected item
+		 */
+
+    /** returns true if the device is mobile*/
+    _isMobile:{
+      type: Boolean
+    },
+
+    _toToggle:{
+      type: Boolean,
+      value: true
+    },
+
+    /** returns true if the device is tablet*/
+    _isTablet:{
+      type: Boolean
+    },
+
+    /**
+     * Describes sections present in Footer
+     *
+     * @type {{title: String, options: Array}}
+     */
+    sections:{
+      type: Object,
+      value: null,
+      notify: true
+    },
+
+    /**
+     * Describes Links present at the bottom of the footer
+     *
+     * @type {{primaryLinks: Object,secondaryLinks: Object,bottomStartLinks: Object, bottomEndLinks: Object}}
+     */
+    links:{
+      type: Object,
+      notify: true,
+      value: null
+
+    },
+
+    /** returns index of selected tab*/
+    _selected:{
+      type: Number,
+      value: 0
+    },
+
+    /** returns true if the device is not desktop*/
+    _notDesktop: {
+      type: Boolean,
+      // when `first` or `last` changes `computeFullName` is called once
+      // and the value it returns is stored as `fullName`
+      computed: '_isSmallScreen(_isTablet, _isMobile)'
+    },
+
+    /** returns true If no content is passed*/
+    _hideIfNoChildren:{
+      type: Boolean,
+      value: true
+    }
+  },
+
+  ready: function(){
+    this._hideIfNoChildren = Polymer.dom(this).children.length === 0;
+    if(this.sections && this.sections.selectedIndex)
+      this._selected = this.sections.selectedIndex;
+  },
+
+  _isSmallScreen: function(isTablet, isMobile){
+    return isTablet || isMobile;
+  },
+
+  _centerAlignIfResponsive: function(_notDesktop){
+    const primaryLinks = this._hideIfNullOrEmpty(this.links.primaryLinks);
+    const secondaryLinks = this._hideIfNullOrEmpty(this.links.secondaryLinks);
+    if(this._isMobile)
+      return "vertical ";
+    if(primaryLinks !== secondaryLinks)
+      return "horizontal center-justified";
+    if(!this._hideIfNullOrEmpty(this.links.secondaryLinks) && this._hideIfContentOverflowHappens(this.links)){
+      return "horizontal center-justified";
+    }
+    return "horizontal";
+  },
+
+  _handleFollowAlignment: function(_isMobile){
+    return _isMobile? "center-justified vertical": "end-justified horizontal";
+  },
+
+  _hideIfNoSections: function(sections){
+    return (!sections || sections.length === 0);
+  },
+
+  _hideIfContentOverflowHappens: function(links,_isMobile){
+    if(links.secondaryLinks){
+      var options = links.secondaryLinks.options;
+      return ((options && options.length> 5) || this._isTablet || this._isMobile);
+    }
+    return false;
+  },
+
+  _hideSectionIfOverflowOrSectionNotPresent: function(links, notDesktop, toToggle){
+    var secondaryLinks = links.secondaryLinks;
+    if(secondaryLinks){
+      var options = secondaryLinks.options;
+      let result = this._hideIfNoSections(options) || this._hideIfContentOverflowHappens(this.links, notDesktop);
+      return toToggle? !result : result;
+    }
+    return true;
+  },
+
+  _hideIfPrimaryAndSecondaryLinksNotPresent: function(links){
+    if(!links || (this._hideIfNullOrEmpty(links.primaryLinks) && this._hideIfNullOrEmpty(links.secondaryLinks)))
+    return true;
+    else
+    return false;
+  },
+
+  _hideIfNullOrEmpty: function(sections){
+    return !(sections && sections.options && sections.options.length > 0);
+  },
+
+  _tabChanged:function(e, index){
+    this.fire('t-footer-section-changed',index);
+  },
+
+  /** Returns current state of the footer **/
+  getState: function(){
+    this.sections.selectedIndex =  this._selected;
+    return {
+      sections: this.sections,
+      links: this.links
+    };
+  },
+
+  _hideSectionIfDesktopOrNoStartLinks: function(links, notDesktop){
+    var bottomStartLinks = links.bottomStartLinks;
+    return (!(bottomStartLinks && bottomStartLinks.length > 0) || notDesktop) 
+  },
+
+  _changeSelectedSection: function(e, detail){
+    this.sections.selectedIndex = detail.index;
+  }
+
+});
+</script>
+</dom-module>

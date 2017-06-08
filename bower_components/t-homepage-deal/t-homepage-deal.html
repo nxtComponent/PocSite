@@ -1,0 +1,239 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../iron-media-query/iron-media-query.html">
+<link rel="import" href="../paper-tabs/paper-tabs.html">
+<link rel="import" href="../iron-pages/iron-pages.html">
+<link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
+<link rel="import" href="../iron-image/iron-image.html">
+<link rel="import" href="../paper-spinner/paper-spinner.html">
+<link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="../paper-tabs/paper-tab.html">
+<link rel="import" href="./t-homepage-deal-styles.html">
+<script src="./nested/js/jquery-1.7.1.min.js"></script>
+<link href="./nested/style.css" rel="stylesheet">
+<script src="./nested/makeboxes.js"></script>
+<script src="./nested/jquery.nested.js"></script>
+
+<!--
+  `t-homepage-deal`
+  travelnxt Masonry style Photo grid
+  fully responsive photo grid
+
+  It requires Jquery 1.7.1 and above
+
+  ### styling
+
+  `<t-homepage-deal>` provides the following custom properties and mixins
+  for styling:
+
+  custom property | description | default
+  ----------------|-------------|----------
+  `--t-deal-back-color` | Text color of back of the images| `#fff`
+  `--t-deal-back-bg` | background color Back side| `#03a9f5`
+  `--t-deal-bg` | Background color of deals section| `#fff`
+  `--t-deal-caption-bg` | Caption background color rgba| `rgba(54, 65, 67, 0.7)`
+  `--t-deal-caption-color` | Text color of caption | `#fff`
+  `--t-deal-tab-color` | Text color of tabs | `#999999`
+  `--t-deal-selected-bar-color` | Color of selected tab ink bar| `#4eaf52`
+  `--t-deal-selected-tab-color` | Text color of the selected tab | `#4eaf52`
+
+  @group travelnxt elements
+  @element t-homepage-deal
+  @demo demo/index.html
+-->
+
+<dom-module id="t-homepage-deal">
+  <template>
+    <style is="custom-style" include="t-homepage-deal-styles iron-flex iron-flex-alignment"></style>
+    <iron-media-query query="(min-width : 320px) and (max-width : 767px)" query-matches="{{_isMobile}}"></iron-media-query>
+    <iron-media-query query="(max-width: 1024px) and (min-width: 768px)" query-matches="{{_isTablet}}"></iron-media-query>
+    <div class="flex header"><h1 class="main-heading">[[heading]]</h1></div>
+    <div id="dealContainer" class="flex container">
+      <div class="tab-container">
+        <paper-tabs id="tabs" selected-class="selected-tab" on-iron-select="_tabChanged" fit-container class="tabs" scrollable selected="{{selected}}" >
+          <template is="dom-repeat" items="[[data]]" >
+            <paper-tab>[[item.category]]</paper-tab>
+          </template>
+        </paper-tabs>
+      </div>
+
+      <iron-pages class="flex " selected="[[selected]]">
+        <template is="dom-repeat" items="[[data]]" as="category">
+          <div class="gridContainer">
+            <template is="dom-repeat" items="[[category.deals]]">
+              <div class$="[[_getBoxType(item.type)]]" on-click="_flip">
+                    <!-- <paper&#45;spinner active="[[loading]]" /> -->
+                <div class="panel">
+                  <div class="front tile vertical layout">
+                    <iron-image alt="[[index]]" loading="{{loading}}" class="image" sizing="[[_getSizing(item.imageSize)]]" src="[[item.image]]"></iron-image>
+										<div class="flex"></div>
+										<div class="caption horizontal layout">
+											<div class="padded horizontal layout flex">
+												<div class=" content flex ">
+													<div class="heading">[[item.heading]]</div>
+													<div class="sub-heading">[[item.subHeading]]</div>
+												</div>
+												<div class="content">[[_getCaptionValue(item.priceText, item.priceValue)]]</div>
+											</div>
+										</div>
+									</div>
+									<div class="back  layout vertical">
+										<div class="back-content flex vertical layout">
+											<div class="heading">[[item.heading]]</div>
+											<div class="sub-heading">[[item.subHeading]]</div>
+											<div class="description">[[_getEllipsedDescription(item.description, item.type)]]</div>
+											<div class="price flex">[[_getCaptionValue(item.priceText, item.priceValue)]]</div>
+											<a class="action-button" href="[[item.url]]">[[item.button]]</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</template>
+					</div>
+				</template>
+			</iron-pages>
+
+		</div>
+	</template>
+	<script>
+Polymer({
+	is: 't-homepage-deal',
+
+	behaviors: [
+		Polymer.IronResizableBehavior
+	],
+
+	listeners: {
+		'iron-resize': '_screenChanged'
+			// 't-deal-section-select': '_sectionChanged'
+	},
+
+	properties: {
+		_minWidth: {
+			type: Number,
+			value: 240
+		},
+		/** returns true if the device is mobile*/
+		_isMobile:{
+			type: Boolean,
+			notify:true,
+		},
+		/** returns true if the device is tablet*/
+		_isTablet:{
+			type: Boolean,
+			notify:true,
+		},
+		/**
+		 * Describes Main heading of the photo grid
+		 *
+		 * @type {String}
+		 */
+		heading:{
+			type: String
+		},
+
+		/**
+		 * Describes Photo Grid array configuration
+		 *
+		 * @type {{heading: String, subHeading: String, imageSize: ['cover', 'contain'], type: Number, description: String, button: String, priceText: String, priceValue: String, image: Url}}
+		 */
+		data:{
+			type: Array,
+			notify: true
+		},
+		selected:{
+			type: Number,
+			value: 0,
+			notify:true
+		}
+	},
+
+	_getBoxSize: function(){
+		if(this._isMobile)
+			return window.innerWidth - 40;
+		if(this._isTablet)
+			return window.innerWidth/2 - 22;
+		return 256;
+	},
+
+	_getBoxType: function(type){
+		if(this._isMobile)
+			return "flip-container box size11";
+		return "flip-container box size" + type;
+	},
+
+	attached: function(){
+		var component = this;
+		setTimeout(function(){
+			$(".gridContainer").nested({
+				resizeToFit: true,
+				resizeToFitOptions: {
+					resizeAny: true
+				},
+				minWidth: component._getBoxSize(),
+				gutter:4
+			});
+		},0);
+	},
+
+	_tabChanged: function(item){
+		var flippedTile= this.querySelector('.flipped');
+		if(flippedTile)
+			flippedTile.classList.remove('flipped');
+		$(".gridContainer").nested({
+			resizeToFit: true,
+			resizeToFitOptions: {
+				resizeAny: true
+			},
+			minWidth: this._getBoxSize(),
+			gutter:4
+		});
+	},
+
+	_flip: function(e){
+		var flippedTile= this.querySelector('.flipped');
+		if(flippedTile && !e.currentTarget.querySelector('.flipped'))
+			flippedTile.classList.remove('flipped');
+		e.currentTarget.querySelector('.panel').classList.toggle('flipped');
+	},
+
+	_getSizing: function(sizing){
+		return sizing || 'contain';
+	},
+
+	_getCaptionValue: function(priceText, priceValue){
+		return priceText + ' ' + priceValue;
+	},
+
+	_getEllipsedDescription: function(description, type){
+		if(this._isMobile || type === 11){
+      return (description.length > 140)? description.substr(0,140) + '...': description;
+		}
+		else if(type === 22){
+			return (description.length > 500)?description.substr(0,500) + '...': description;
+		}
+		else
+			return (description.length > 300)?description.substr(0,300) + '...': description;
+	},
+
+	_screenChanged: function(){
+		var flippedTile= this.querySelector('.flipped');
+		if(flippedTile)
+			flippedTile.classList.remove('flipped');
+		$(".gridContainer").nested({
+			resizeToFit: true,
+			resizeToFitOptions: {
+				resizeAny: true
+			},
+			minWidth: this._getBoxSize(),
+			gutter:4
+		});
+	},
+
+	// _sectionChanged: function(e, detail){
+	//   this.set('data.selectedIndex', detail.index);
+	// }
+	//
+});
+	</script>
+</dom-module>

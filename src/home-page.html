@@ -1,0 +1,154 @@
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../bower_components/t-hotel-search/t-search.html">
+
+<link rel="import" href="../bower_components/t-mystique-auth/t-mystique-auth.html">
+<link rel="import" href="../bower_components/t-homepage-deal/t-homepage-deal.html">
+<link rel="import" href="data/deal-data.html">
+
+<dom-module id="home-page">
+  <template>
+    <style include="shared-styles">
+      t-search {
+        --outer-container-color: #424d51;
+        --search-button-color: #4CB050;
+        --dropdown-element-link-color: #4CB050;
+        --button-color-for-rooms: #478BD7;
+        --border-color-for-cards: lightgray;
+        --background-color-for-traveller-card: white;
+        --color-for-calendar-dates: #4CB050;
+        --color-for-calendar-background: white;
+        --color-for-calendar-selected-range: #4CB050;
+        --background-img-for-selected-date: url('../t-input-date-picker/Green circle.svg');
+        --background-img-for-today-date: url('../t-input-date-picker/todayCircle.svg');
+      }
+
+      .search-container {
+        /*background-image: url("/images/background1.jpg");
+        background-size : contain;*/
+        @apply --layout-vertical;
+        @apply --layout-center-center;
+        height: calc(100vh - 64px);
+        padding: 0 16px;
+        background-image: url('/images/background1.jpg');
+        background-size: contain;
+        color: white;
+        text-align: center;
+      }
+
+      .search-heading {
+        font-size: 3em;
+        font-weight: bolder;
+      }
+    </style>
+
+
+    <t-mystique-auth name="mystique" url="http://demo.travelnxt.com/api/authentication/authenticate/context" token-response="{{tokenResponse}}"
+      auto>
+    </t-mystique-auth>
+
+    <div class="search-container">
+      <div class="search-heading">
+        THE EASIEST WAY TO FIND YOUR HOTEL
+      </div>
+      <t-search option=[[searchOptions]] resources=[[searchResources]] dataUrl="http://demo.travelnxt.com/api/content/autosuggest/"
+        token-response="{{tokenResponse}}" on-do-search="__onHotelSearchTrigger">
+      </t-search>
+    </div>
+
+    <div classs="homepage-deal-container">
+      <t-homepage-deal heading="EXPLORE POPULAR DESTINATIONS" data="[[dealData]]"></t-homepage-deal>
+    </div>
+
+  </template>
+
+  <script>
+    Polymer({
+      is: 'home-page',
+      properties: {
+        searchOptions: {
+          type: Object,
+          value: function () {
+            return {
+              "traveller": {
+                "minAdultCount": 1,
+                "maxAdultCount": 6,
+                "minChildCount": 0,
+                "maxChildCount": 6,
+                "totalRoomPaxCount": 6,
+                "minChildAge": 0,
+                "maxChildAge": 12,
+                "defaultAdultCount": 2,
+                "defaultChildCount": 0,
+                "defaultSelectOption": [{
+                  "room": 1,
+                  "adult": 1
+                }, {
+                  "room": 1,
+                  "adult": 2
+                }, {
+                  "room": 1,
+                  "adult": 3
+                }, {
+                  "room": 2,
+                  "adult": 5
+                }]
+              },
+              "maxRoomCount": 6,
+              "date": {
+                "checkInAllowFromNow": 0,
+                "maxStayDuration": 30,
+                "defaultStayDuration": 6,
+                "format": "MM/DD/YY"
+              }
+            };
+          }
+        },
+        searchResources: {
+          type: Object,
+          value: function () {
+            return {
+              "labels": {
+                "adult": "Adult",
+                "children": "Children",
+                "child": "Child",
+                "age": "Age",
+                "room": "Room"
+              },
+              "watermark": {
+                "checkIn": "MM/DD/YY",
+                "checkOut": "MM/DD/YY",
+                "hotelLocation": "City, Airport, Address or Point of Interest"
+              },
+              "errorMessage": {
+                "destinationError": "Please enter your destination",
+                "checkInError": "Please enter checkin date",
+                "checkOutError": "Please enter checkout date"
+
+              }
+            };
+          }
+        },
+        dealData: {
+          type: Array,
+          value: function () {
+            return window.dealData;
+          }
+        }
+      },
+
+      /*
+      * Fire this method when user click on hotel serach button.
+      */
+      __onHotelSearchTrigger: function(e){
+           console.log("hotel search trigger ", e);
+           
+           //TODO - 
+
+           window.location = "/hotel-result";
+      }
+
+    });
+  </script>
+</dom-module>
